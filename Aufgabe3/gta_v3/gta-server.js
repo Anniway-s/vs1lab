@@ -9,7 +9,7 @@
  */
 
 var http = require('http');
-//var path = require('path');
+var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var express = require('express');
@@ -28,7 +28,6 @@ app.set('view engine', 'ejs');
  * Konfiguriere den Pfad für statische Dateien.
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
  */
-
 // TODO: CODE ERGÄNZEN
 
 /**
