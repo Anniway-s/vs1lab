@@ -51,22 +51,34 @@ function GeoTagForm(latitude, longitude, name, hashtag){
  * - Funktion zum hinzufügen eines Geo Tags.
  * - Funktion zum Löschen eines Geo Tags.
  */
-var ArrayGeoTags = new Array();
+var ArrayGeoTags = [];
 
-//GeoTag in Radius suchen
-function searchGeoTag(){
+//GeoTag in Radius suchenp
+function searchGeoTagInRad(){
 
+
+}
+
+//GeoTag nach Hashtag suchen
+function searchGeoTagByTag(tag){
+    var indexWithTags = [];
+    for(var i=0;i<ArrayGeoTags.length;i++){
+        if(ArrayGeoTags[i].hashtag==tag){
+            indexWithTags.push(i);
+        }
+    }
+    return indexWithTags;
 }
 
 //GeoTag zum Array hinzufügen
 function addGeoTag(neuerGeoTag){
-    ArrayGeoTags.push(neuerGeoTag)
+    ArrayGeoTags.push(neuerGeoTag);
 }
 
 //GeoTag von Array entfernen
 function deleteGeoTag(name){
-    let pos = ArrayGeoTags.indexOf(name)
-    let removeItem = ArrayGeoTags.splice(pos, name)
+    let pos = ArrayGeoTags.indexOf(name);
+    ArrayGeoTags.splice(pos, name);
 }
     
 // TODO: CODE ERGÄNZEN
