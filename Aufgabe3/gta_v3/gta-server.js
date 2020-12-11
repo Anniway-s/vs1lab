@@ -36,7 +36,7 @@ app.use(express.static(__dirname + '/public'));
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
 // TODO: CODE ERGÄNZEN
-function GeoTagForm(latitude, longitude, name, hashtag){
+function GeoTagForm(longitude, latitude, name, hashtag){
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
@@ -123,12 +123,14 @@ app.get('/', function(req, res) {
  * Als Response wird das ejs-Template mit Geo Tag Objekten gerendert.
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.use(express.json())
 app.post('/tagging', function(req, res){
 
     var newGeoTagName = GeoTagForm(document.getElementById("longitude").value, document.getElementById("latitude").value, document.getElementById("name").value, document.getElementById("hashtag").value);
     addGeoTag(newGeoTagName);
+
     res.render('gta', {
         taglist: ArrayGeoTags
     });
