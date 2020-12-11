@@ -4,7 +4,7 @@ exports.searchGeoTagInRad = function (rad,lat, long, ArrayGeoTags){
     if(rad==null){ //´default
         rad= 100;
     }
-    var ArrayGeoTagsInRad = [];
+    var ArrayGeoTagsInRad = new Array();
     for(var i=0;i<ArrayGeoTags.length;i++){
         //distanz ist die QuadratWurzel aus [(x2-x1)^2 + (y2-y1)^2]
         var distance = Math.sqrt(Math.pow(lat-ArrayGeoTags[i].latitude,2) +  Math.pow(long-ArrayGeoTags[i].longitude,2));
@@ -21,7 +21,7 @@ exports.searchGeoTagInRad = function (rad,lat, long, ArrayGeoTags){
 
 //GeoTag nach Hashtag suchen
 exports.searchGeoTagByTag = function (tag, ArrayGeoTags){
-    var ArrayWithTags = [];
+    var ArrayWithTags = new Array();
     for(var i=0;i<ArrayGeoTags.length;i++){
         if(ArrayGeoTags[i].hashtag==tag){
             ArrayWithTags.push(ArrayGeoTags[i]);

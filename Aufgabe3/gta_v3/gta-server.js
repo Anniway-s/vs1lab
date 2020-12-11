@@ -144,9 +144,13 @@ app.post('/tagging', function(req, res){
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
 app.post('/discovery', function(req, res){
-    var filtered = inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags)
+    var lat = req.body.current_latitude;
+    var long = req.body.current_longitude;
+    var term = req.body.search_term;
+    let filtered = inMemory.searchGeoTagByTag(term, inMemory.ArrayGeoTags)
+    console.log(lat, long, term)
     res.render('gta',{
-        taglist: inMemory.searchGeoTagInRad(100,req.body.current_latitude,req.body.current_longitude, inMemory.ArrayGeoTags),
+        taglist: inMemory.searchGeoTagInRad(100,lat,long, filtered),
         currentLatitude: req.body.current_latitude,
         currentLongitude: req.body.current_longitude
     });
