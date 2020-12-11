@@ -123,11 +123,7 @@ app.get('/', function(req, res) {
  * Als Response wird das ejs-Template mit Geo Tag Objekten gerendert.
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-
 app.post('/tagging', function(req, res){
-
     var newGeoTagName = GeoTagForm(document.getElementById("longitude").value, document.getElementById("latitude").value, document.getElementById("name").value, document.getElementById("hashtag").value);
     addGeoTag(newGeoTagName);
 
@@ -148,8 +144,12 @@ app.post('/tagging', function(req, res){
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
-app.post('/discovery', function(rep, res){
-
+app.post('/discovery', function(req, res){
+    var filtered = searchGeoTagByTag(req.body())
+    var RadTags =searchGeoTagInRad(null,document.getElementById("latitude").value,document.getElementById("longitude").value);
+    res.render('gta',{
+        taglist:RadTags
+    });
 })
 // TODO: CODE ERGÄNZEN
 
