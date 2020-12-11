@@ -54,14 +54,14 @@ function GeoTagForm(latitude, longitude, name, hashtag){
 var ArrayGeoTags = new Array;
 
 //GeoTag zum Array hinzufügen
-var addGeoTag = function(){
+function addGeoTag(neuerGeoTag){
     let newLenght = ArrayGeoTags.push(neuerGeoTag)
 }
 
 //GeoTag von Array entfernen
-var deleteGeoTag = function(name){
+function deleteGeoTag(name){
     let pos = ArrayGeoTags.indexOf(name)
-    let removeItem = ArrayGeoTags.splice(pos, a)
+    let removeItem = ArrayGeoTags.splice(pos, name)
 }
     
 // TODO: CODE ERGÄNZEN
