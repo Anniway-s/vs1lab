@@ -28,17 +28,20 @@ app.set('view engine', 'ejs');
  * Konfiguriere den Pfad für statische Dateien.
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
  */
-
-app.use(express.static(__dirname + '/public'));
-
 // TODO: CODE ERGÄNZEN
+app.use(express.static(__dirname + '/public'));
 
 /**
  * Konstruktor für GeoTag Objekte.
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
-
 // TODO: CODE ERGÄNZEN
+function GeoTagForm(latitude, longitude, name, hashtag){
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.name = name;
+    this.hashtag = hashtag;
+}
 
 /**
  * Modul für 'In-Memory'-Speicherung von GeoTags mit folgenden Komponenten:
@@ -48,7 +51,19 @@ app.use(express.static(__dirname + '/public'));
  * - Funktion zum hinzufügen eines Geo Tags.
  * - Funktion zum Löschen eines Geo Tags.
  */
+var ArrayGeoTags = new Array;
 
+//GeoTag zum Array hinzufügen
+var addGeoTag = function(){
+    let newLenght = ArrayGeoTags.push(neuerGeoTag)
+}
+
+//GeoTag von Array entfernen
+var deleteGeoTag = function(name){
+    let pos = ArrayGeoTags.indexOf(name)
+    let removeItem = ArrayGeoTags.splice(pos, a)
+}
+    
 // TODO: CODE ERGÄNZEN
 
 /**
@@ -78,7 +93,9 @@ app.get('/', function(req, res) {
  * Als Response wird das ejs-Template mit Geo Tag Objekten gerendert.
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
-
+app.post('/tagging', function(req, res){
+    
+});
 // TODO: CODE ERGÄNZEN START
 
 /**
@@ -92,7 +109,9 @@ app.get('/', function(req, res) {
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
+app.post('/discovery', function(rep, res){
 
+})
 // TODO: CODE ERGÄNZEN
 
 /**
