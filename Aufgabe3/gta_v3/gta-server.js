@@ -41,6 +41,7 @@ function GeoTagForm(latitude, longitude, name, hashtag){
     this.longitude = longitude;
     this.name = name;
     this.hashtag = hashtag;
+    return this;
 }
 
 /**
@@ -62,7 +63,8 @@ function searchGeoTagInRad(rad,lat, long){
     for(var i=0;i<ArrayGeoTags.length;i++){
         //distanz ist die QuadratWurzel aus [(x2-x1)^2 + (y2-y1)^2]
         var distance = Math.sqrt(Math.pow(lat-ArrayGeoTags[i].latitude,2) +  Math.pow(long-ArrayGeoTags[i].longitude,2));
-
+        if(distance<0)
+            distance*=-1; //vorzeichen entfernen
         if(distance <=rad){
             ArrayGeoTagsInRad.push(ArrayGeoTags[i]);
         }
@@ -121,8 +123,10 @@ app.get('/', function(req, res) {
  * Als Response wird das ejs-Template mit Geo Tag Objekten gerendert.
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
+
+app.use(express.json())
 app.post('/tagging', function(req, res){
-    var newGeoTagName = document.getElementById("name").value
+
     var newGeoTagName = GeoTagForm(document.getElementById("longitude").value, document.getElementById("latitude").value, document.getElementById("name").value, document.getElementById("hashtag").value);
     addGeoTag(newGeoTagName);
     res.render('gta', {
