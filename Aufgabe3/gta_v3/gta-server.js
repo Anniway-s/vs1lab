@@ -57,12 +57,13 @@ var ArrayGeoTags = [];
 //GeoTag in Radius suchen
 function searchGeoTagInRad(rad,lat, long){
     if(rad==null){ //´default
-        rad= 10;
+        rad= 100;
     }
     var ArrayGeoTagsInRad = [];
-    for(var i=0;i<=ArrayGeoTags.length;i++){
+    for(var i=0;i<ArrayGeoTags.length;i++){
         //distanz ist die QuadratWurzel aus [(x2-x1)^2 + (y2-y1)^2]
         var distance = Math.sqrt(Math.pow(lat-ArrayGeoTags[i].latitude,2) +  Math.pow(long-ArrayGeoTags[i].longitude,2));
+        console.log("DISTANCE "+i +" "+distance);
         if(distance<0)
             distance*=-1; //vorzeichen entfernen
         if(distance <=rad){
@@ -75,7 +76,7 @@ function searchGeoTagInRad(rad,lat, long){
 //GeoTag nach Hashtag suchen
 function searchGeoTagByTag(tag){
     var ArrayWithTags = [];
-    for(var i=0;i<=ArrayGeoTags.length;i++){
+    for(var i=0;i<ArrayGeoTags.length;i++){
         if(ArrayGeoTags[i].hashtag==tag){
             ArrayWithTags.push(ArrayGeoTags[i]);
         }
@@ -134,7 +135,7 @@ app.post('/tagging', function(req, res){
     });
 
     res.render('gta', {
-        taglist: searchGeoTagInRad(.5,req.body.longitude,req.body.latitude),
+        taglist: searchGeoTagInRad(100,req.body.longitude,req.body.latitude),
         currentLatitude: req.body.latitude,
         currentLongitude: req.body.longitude
     });
