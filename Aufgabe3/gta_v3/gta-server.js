@@ -20,7 +20,7 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-
+app.use(bodyParser.json());
 
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
@@ -144,13 +144,10 @@ app.post('/tagging', function(req, res){
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
 app.post('/discovery', function(req, res){
-    var lat = req.body.current_latitude;
-    var long = req.body.current_longitude;
-    var term = req.body.search_term;
-    let filtered = inMemory.searchGeoTagByTag(term, inMemory.ArrayGeoTags)
-    console.log(lat, long, term)
+    console.log("lat,long,term: " + req.body.current_latitude +" " + req.body.current_longitude +" " +  req.body.search_term);
+    console.log("search: " + req.body.search_term);
     res.render('gta',{
-        taglist: inMemory.searchGeoTagInRad(100,lat,long, filtered),
+        taglist: inMemory.searchGeoTagInRad(100,req.body.current_latitude,req.body.current_longitude, inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags)),
         currentLatitude: req.body.current_latitude,
         currentLongitude: req.body.current_longitude
     });
