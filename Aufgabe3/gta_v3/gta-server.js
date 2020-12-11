@@ -53,21 +53,32 @@ function GeoTagForm(latitude, longitude, name, hashtag){
  */
 var ArrayGeoTags = [];
 
-//GeoTag in Radius suchenp
-function searchGeoTagInRad(){
+//GeoTag in Radius suchen
+function searchGeoTagInRad(rad,lat, long){
+    if(rad==null){ //´default
+        rad= 10;
+    }
+    var ArrayGeoTagsInRad = [];
+    for(var i=0;i<ArrayGeoTags.length;i++){
+        //distanz ist die QuadratWurzel aus [(x2-x1)^2 + (y2-y1)^2]
+        var distance = Math.sqrt(Math.pow(lat-ArrayGeoTags[i].latitude,2) +  Math.pow(long-ArrayGeoTags[i].longitude,2));
 
-
+        if(distance <=rad){
+            ArrayGeoTagsInRad.push(ArrayGeoTags[i]);
+        }
+    }
+    return ArrayGeoTagsInRad;
 }
 
 //GeoTag nach Hashtag suchen
 function searchGeoTagByTag(tag){
-    var indexWithTags = [];
+    var ArrayWithTags = [];
     for(var i=0;i<ArrayGeoTags.length;i++){
         if(ArrayGeoTags[i].hashtag==tag){
-            indexWithTags.push(i);
+            ArrayWithTags.push(ArrayGeoTags[i]);
         }
     }
-    return indexWithTags;
+    return ArrayWithTags;
 }
 
 //GeoTag zum Array hinzufügen
