@@ -85,7 +85,8 @@ function searchGeoTagByTag(tag){
 
 //GeoTag zum Array hinzufügen
 function addGeoTag(neuerGeoTag){
-    ArrayGeoTags.push(neuerGeoTag);
+    ArrayGeoTags[ArrayGeoTags.length]=neuerGeoTag;
+    //console.log("Array erweitert mit :"+ArrayGeoTags[ArrayGeoTags.length].name)
 }
 
 //GeoTag von Array entfernen
@@ -124,11 +125,18 @@ app.get('/', function(req, res) {
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
 app.post('/tagging', function(req, res){
-    var newGeoTagName = GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-    addGeoTag(newGeoTagName);
+    var newGeoTag = GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+    addGeoTag(newGeoTag);
+
+    ArrayGeoTags.forEach(function (gtag){
+        console.log("Tag:" +gtag.name);
+        console.log("Vergleich:" +ArrayGeoTags[0].name);
+    });
 
     res.render('gta', {
-        taglist: ArrayGeoTags
+        taglist: searchGeoTagInRad(.5,req.body.longitude,req.body.latitude),
+        currentLatitude: req.body.latitude,
+        currentLongitude: req.body.longitude
     });
 });
 // TODO: CODE ERGÄNZEN START
