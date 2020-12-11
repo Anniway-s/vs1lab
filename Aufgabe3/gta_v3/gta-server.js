@@ -60,7 +60,7 @@ function searchGeoTagInRad(rad,lat, long){
         rad= 10;
     }
     var ArrayGeoTagsInRad = [];
-    for(var i=0;i<ArrayGeoTags.length;i++){
+    for(var i=0;i<=ArrayGeoTags.length;i++){
         //distanz ist die QuadratWurzel aus [(x2-x1)^2 + (y2-y1)^2]
         var distance = Math.sqrt(Math.pow(lat-ArrayGeoTags[i].latitude,2) +  Math.pow(long-ArrayGeoTags[i].longitude,2));
         if(distance<0)
@@ -75,7 +75,7 @@ function searchGeoTagInRad(rad,lat, long){
 //GeoTag nach Hashtag suchen
 function searchGeoTagByTag(tag){
     var ArrayWithTags = [];
-    for(var i=0;i<ArrayGeoTags.length;i++){
+    for(var i=0;i<=ArrayGeoTags.length;i++){
         if(ArrayGeoTags[i].hashtag==tag){
             ArrayWithTags.push(ArrayGeoTags[i]);
         }
@@ -124,7 +124,7 @@ app.get('/', function(req, res) {
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
 app.post('/tagging', function(req, res){
-    var newGeoTagName = GeoTagForm(document.getElementById("longitude").value, document.getElementById("latitude").value, document.getElementById("name").value, document.getElementById("hashtag").value);
+    var newGeoTagName = GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
     addGeoTag(newGeoTagName);
 
     res.render('gta', {
@@ -145,7 +145,7 @@ app.post('/tagging', function(req, res){
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
 app.post('/discovery', function(req, res){
-    var filtered = searchGeoTagByTag(req.body())
+    var filtered = searchGeoTagByTag(req.body.latitude)
     var RadTags =searchGeoTagInRad(null,document.getElementById("latitude").value,document.getElementById("longitude").value);
     res.render('gta',{
         taglist:RadTags
