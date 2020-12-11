@@ -51,11 +51,16 @@ function GeoTagForm(latitude, longitude, name, hashtag){
  * - Funktion zum hinzufügen eines Geo Tags.
  * - Funktion zum Löschen eines Geo Tags.
  */
-var ArrayGeoTags = new Array;
+var ArrayGeoTags = new Array();
+
+//GeoTag in Radius suchen
+function searchGeoTag(){
+
+}
 
 //GeoTag zum Array hinzufügen
 function addGeoTag(neuerGeoTag){
-    let newLenght = ArrayGeoTags.push(neuerGeoTag)
+    ArrayGeoTags.push(neuerGeoTag)
 }
 
 //GeoTag von Array entfernen
@@ -94,7 +99,12 @@ app.get('/', function(req, res) {
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
 app.post('/tagging', function(req, res){
-    
+    var newGeoTagName = document.getElementById("name").value
+    var newGeoTagName = GeoTagForm(document.getElementById("longitude").value, document.getElementById("latitude").value, document.getElementById("name").value, document.getElementById("hashtag").value);
+    addGeoTag(newGeoTagName);
+    res.render('gta', {
+        taglist: ArrayGeoTags
+    });
 });
 // TODO: CODE ERGÄNZEN START
 
