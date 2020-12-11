@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
+
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
 
@@ -52,6 +53,9 @@ function GeoTagForm(longitude, latitude, name, hashtag){
  * - Funktion zum hinzufügen eines Geo Tags.
  * - Funktion zum Löschen eines Geo Tags.
  */
+
+var inMemory = require("./public/javascripts/inMemory.js")
+ /*
 var ArrayGeoTags = [];
 
 //GeoTag in Radius suchen
@@ -73,16 +77,6 @@ function searchGeoTagInRad(rad,lat, long){
     return ArrayGeoTagsInRad;
 }
 
-//GeoTag nach Hashtag suchen
-function searchGeoTagByTag(tag){
-    var ArrayWithTags = [];
-    for(var i=0;i<ArrayGeoTags.length;i++){
-        if(ArrayGeoTags[i].hashtag==tag){
-            ArrayWithTags.push(ArrayGeoTags[i]);
-        }
-    }
-    return ArrayWithTags;
-}
 
 //GeoTag zum Array hinzufügen
 function addGeoTag(neuerGeoTag){
@@ -94,7 +88,7 @@ function addGeoTag(neuerGeoTag){
 function deleteGeoTag(name){
     let pos = ArrayGeoTags.indexOf(name);
     ArrayGeoTags.splice(pos, name);
-}
+}*/
     
 // TODO: CODE ERGÄNZEN
 
@@ -126,16 +120,12 @@ app.get('/', function(req, res) {
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
 app.post('/tagging', function(req, res){
-    var newGeoTag = GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-    addGeoTag(newGeoTag);
+    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+    inMemory.addGeoTag(newGeoTag, inMemory.ArrayGeoTags);
 
-    ArrayGeoTags.forEach(function (gtag){
-        console.log("Tag:" +gtag.name);
-        console.log("Vergleich:" +ArrayGeoTags[0].name);
-    });
 
     res.render('gta', {
-        taglist: searchGeoTagInRad(100,req.body.longitude,req.body.latitude),
+        taglist: inMemory.searchGeoTagInRad(100,req.body.longitude,req.body.latitude, inMemory.ArrayGeoTags),
         currentLatitude: req.body.latitude,
         currentLongitude: req.body.longitude
     });
@@ -154,10 +144,11 @@ app.post('/tagging', function(req, res){
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
 app.post('/discovery', function(req, res){
-    var filtered = searchGeoTagByTag(req.body.latitude)
-    var RadTags =searchGeoTagInRad(null,document.getElementById("latitude").value,document.getElementById("longitude").value);
+    var filtered = inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags)
     res.render('gta',{
-        taglist:RadTags
+        taglist: inMemory.searchGeoTagInRad(100,req.body.current_latitude,req.body.current_longitude, inMemory.ArrayGeoTags),
+        currentLatitude: req.body.current_latitude,
+        currentLongitude: req.body.current_longitude
     });
 })
 // TODO: CODE ERGÄNZEN
