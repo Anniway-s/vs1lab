@@ -31,16 +31,16 @@
 					<fieldset>
 						<legend>Enter new GeoTag</legend>
 						<label for="latitude">latitude</label>
-						<input type="text" placeholder="e.g. 49.01379" id="latitude" name="latitude" required />
+						<input type="text" placeholder="e.g. 49.01379" id="latitude" name="latitude" value= "<%= latitude %>" required />
 
 						<label for="longitude">longitude</label>
-						<input type="text" placeholder="e.g. 8.390071" id="longitude" name="longitude" required>
+						<input type="text" placeholder="e.g. 8.390071" id="longitude" name="longitude" value= "<%= longitude %>" required>
 
 						<label for="name">name</label>
 						<input type="text" id="name" name="name" placeholder="some name" maxlength="10" required>
 
 						<label for="hashtag">hashtag</label>
-						<input type="text" id="hashtag" placeholder="# + max. 10 letters" name="hashtag" pattern="[#]+[a-zA-Z0-9]+" maxlength="11">
+						<input type="text" id="hashtag" placeholder="# + max. 10 letters" name="hashtag" pattern="[#]+[a-zA-Z0-9]+" maxlength="11" >
 
 						<input type="submit" value="submit">
 					</fieldset>
@@ -57,12 +57,14 @@
 				<!-- ############### Aufgabe1a Form2 Start -->
 				<form id="filter-form" action="/discovery" method="post">
 					<fieldset>
-						<legend>Filter by Searchterm</legend>
-						<label for="search term"></label>
-						<input type="text" id="search_term" name="search_term" placeholder="search term" maxlength="11">
-						<input type="hidden" id="current_longitude" name="current_longitude">
-						<input type="hidden" id="current_latitude" name="current_latitude">
-						<input type="submit" value="aplly">
+						
+							<legend>Filter by Searchterm</legend>
+							<label for="search term"></label>
+							<input type="text" id="search_term" name="search_term" placeholder="search term" maxlength="11">
+							<input type="hidden" id="current_longitude" name="current_longitude" value= "<%= longitude %>" >
+							<input type="hidden" id="current_latitude" name="current_latitude" value= "<%= latitude %>" >
+							<input type="submit" value="aplly">
+						
 					</fieldset>
 				</form>
 			</section>
@@ -80,7 +82,7 @@
 
 		<div class="col-6">
 			<div class="tagmap">
-				<img id="result-img" src="./images/mapview.jpg" alt="a map with locations" />
+				<img id="result-img" src="./images/mapview.jpg" data-tags="<%= map %>" alt="a map with locations" />
 				<div class="caption">Result map</div>
 			</div>
 

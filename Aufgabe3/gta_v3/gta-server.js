@@ -54,7 +54,8 @@ function GeoTagForm(longitude, latitude, name, hashtag){
  * - Funktion zum Löschen eines Geo Tags.
  */
 
-var inMemory = require("./public/javascripts/inMemory.js")
+var inMemory = require("./public/javascripts/inMemory.js");
+const { json } = require('body-parser');
  /*
 var ArrayGeoTags = [];
 
@@ -103,7 +104,12 @@ function deleteGeoTag(name){
 
 app.get('/', function(req, res) {
     res.render('gta', {
-        taglist: []
+        taglist: [],
+        currentLatitude: "",
+        currentLongitude: "",
+        latitude: "",
+        longitude: "",
+        map: ""
     });
 });
 
@@ -122,12 +128,11 @@ app.get('/', function(req, res) {
 app.post('/tagging', function(req, res){
     let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
     inMemory.addGeoTag(newGeoTag, inMemory.ArrayGeoTags);
-
-
     res.render('gta', {
         taglist: inMemory.searchGeoTagInRad(100,req.body.longitude,req.body.latitude, inMemory.ArrayGeoTags),
-        currentLatitude: req.body.latitude,
-        currentLongitude: req.body.longitude
+        latitude:req.body.latitude,
+        longitude: req.body.longitude,
+        map: JSON.stringify(inMemory.ArrayGeoTags)
     });
 });
 // TODO: CODE ERGÄNZEN START
@@ -148,8 +153,9 @@ app.post('/discovery', function(req, res){
     console.log("search: " + req.body.search_term);
     res.render('gta',{
         taglist: inMemory.searchGeoTagInRad(100,req.body.current_latitude,req.body.current_longitude, inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags)),
-        currentLatitude: req.body.current_latitude,
-        currentLongitude: req.body.current_longitude
+        latitude: req.body.current_latitude,
+        longitude: req.body.current_longitude,
+        map: JSON.stringify(inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags))
     });
 })
 // TODO: CODE ERGÄNZEN

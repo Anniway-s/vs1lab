@@ -84,6 +84,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     // Hier Google Maps API Key eintragen
     var apiKey = "PSXFEOKIyn1Ywt0V1l1x1SCOmOGwdoJ1";
 
+
     /**
      * Funktion erzeugt eine URL, die auf die Karte verweist.
      * Falls die Karte geladen werden soll, muss oben ein API Key angegeben
@@ -105,7 +106,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         if (tags !== undefined) tags.forEach(function(tag) {
             tagList += "|" + tag.name + "," + tag.latitude + "," + tag.longitude;
         });
-
+        console.log(tagList)
         var urlString = "https://www.mapquestapi.com/staticmap/v4/getmap?key=" +
             apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lat + "," + lon + "&" + tagList;
 
@@ -120,6 +121,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
         updateLocation: function() {
+            if(document.getElementById("longitude").value == "" && document.getElementById("latitude").value == ""){
             //Aufgabe 2.2.1
             tryLocate(function(c){
                 console.log(c.coords.longitude);
@@ -133,6 +135,12 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
                 //Aufgabe 2.2.2
                 var thisTag;
+                var thisTagString = document.getElementById("result-img").getAttribute("data-tags");
+                if(thisTagString !== ""){
+                    thisTag = JSON.parse(thisTagString);
+                }
+                
+                console.log(thisTagString)
                 /**Zoom von [0-18] wählbar*/
                 var zoom = 13;
                 var URL = getLocationMapSrc(document.getElementById("latitude").value, 
@@ -140,13 +148,31 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
                 thisTag, 
                 zoom);
 
-            //Suchen und ersetzen
-            var map = document.getElementById("result-img");
-            map.setAttribute ("src" , URL)
+                //Suchen und ersetzen
+                var map = document.getElementById("result-img");
+                map.setAttribute ("src" , URL)
 
-            },function(error){
-                alert(error);
-            });
+                },function(error){
+                    alert(error);
+                });
+            }else{
+                var zoom;
+                var thisTag;
+                var thisTagString = document.getElementById("result-img").getAttribute("data-tags");
+                if(thisTagString !== ""){
+                    thisTag = JSON.parse(thisTagString);
+                }
+                var URL = getLocationMapSrc(document.getElementById("latitude").value, 
+                document.getElementById("longitude").value, 
+                thisTag, 
+                zoom);
+
+                //Suchen und ersetzen
+                var map = document.getElementById("result-img");
+                map.setAttribute ("src" , URL)
+
+            }
+
         }
 
     }; // ... Ende öffentlicher Teil
