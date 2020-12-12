@@ -105,8 +105,6 @@ function deleteGeoTag(name){
 app.get('/', function(req, res) {
     res.render('gta', {
         taglist: [],
-        currentLatitude: "",
-        currentLongitude: "",
         latitude: "",
         longitude: "",
         map: ""
