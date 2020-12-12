@@ -40,28 +40,36 @@ exports.searchGeoTagByTag = function (tag, ArrayGeoTags){
                 console.log("  *Match!")
             }
         }
-    //Wenn Tag ein Name ist
+    //Wenn Tag ein Name ist oder der Hashtag ohne # gesucht wurde
     }else{
+        console.log(" Landet in Else (Ist kein Hashtag enthalten)")
         //Jedes Objekt von den aktuellen Tags
-        console.log(" Landet in Else (Ist kein Hashtag)")
         for(var i=0;i<ArrayGeoTags.length;i++){
             console.log("Kommt an in TagSuche (Name): Tag, ausArrayGeoTags : " + tag +" "+ArrayGeoTags[i].name);
+            //Haben unterschiedliche länge
             if(ArrayGeoTags[i].name.length > tag.length){
                 console.log("Sind nicht gleich lang!")
+                //Ist der Tag der Anfang eines Namens?
                 if(ArrayGeoTags[i].name.substring(0, tag.length) ==tag.substring(0, tag.length)){
                     ArrayWithTags.push(ArrayGeoTags[i]);
+                //Anfang eines Hashtags?
                 }else if(ArrayGeoTags[i].hashtag.substring(1, tag.length+1) ==tag.substring(0, tag.length)){
                     ArrayWithTags.push(ArrayGeoTags[i]);
+                //Ist keins von beidem
                 }else{
                     console.log("Nichts >.<")
                 }
+            //Haben gleiche länge
             }else{
                 console.log("Sind gleich lang!")
+                //Sind Namen und Tag gleich?
                 if(ArrayGeoTags[i].name==tag){
                     ArrayWithTags.push(ArrayGeoTags[i]);
                     console.log("  *Match!")
+                //Passt es dann mit dem Hashtag?
                 }else if(ArrayGeoTags[i].hashtag.substring(1, tag.length+1) ==tag.substring(0, tag.length)){
                     ArrayWithTags.push(ArrayGeoTags[i]);
+                //Keins von beidem
                 }else{
                     console.log("Nichts >.<")
                 }
