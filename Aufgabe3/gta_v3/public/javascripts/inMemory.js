@@ -11,8 +11,7 @@ exports.searchGeoTagInRad = function (rad,lat, long, ArrayGeoTags){
         //distanz ist die QuadratWurzel aus [(x2-x1)^2 + (y2-y1)^2]
         var distance = Math.sqrt(Math.pow(lat-ArrayGeoTags[i].latitude,2) +  Math.pow(long-ArrayGeoTags[i].longitude,2));
         console.log("DISTANCE "+i +" "+distance);
-        if(distance<0)
-            distance*=-1; //vorzeichen entfernen
+
         if(distance <=rad){
             ArrayGeoTagsInRad.push(ArrayGeoTags[i]);
         }

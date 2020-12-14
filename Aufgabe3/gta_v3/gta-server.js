@@ -29,14 +29,14 @@ app.set('view engine', 'ejs');
  * Konfiguriere den Pfad für statische Dateien.
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
  */
-// TODO: CODE ERGÄNZEN
+
 app.use(express.static(__dirname + '/public'));
 
 /**
  * Konstruktor für GeoTag Objekte.
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
-// TODO: CODE ERGÄNZEN
+
 function GeoTagForm(longitude, latitude, name, hashtag){
     this.latitude = latitude;
     this.longitude = longitude;
@@ -56,42 +56,9 @@ function GeoTagForm(longitude, latitude, name, hashtag){
 
 var inMemory = require("./public/javascripts/inMemory.js");
 const { json } = require('body-parser');
- /*
-var ArrayGeoTags = [];
 
-//GeoTag in Radius suchen
-function searchGeoTagInRad(rad,lat, long){
-    if(rad==null){ //´default
-        rad= 100;
-    }
-    var ArrayGeoTagsInRad = [];
-    for(var i=0;i<ArrayGeoTags.length;i++){
-        //distanz ist die QuadratWurzel aus [(x2-x1)^2 + (y2-y1)^2]
-        var distance = Math.sqrt(Math.pow(lat-ArrayGeoTags[i].latitude,2) +  Math.pow(long-ArrayGeoTags[i].longitude,2));
-        console.log("DISTANCE "+i +" "+distance);
-        if(distance<0)
-            distance*=-1; //vorzeichen entfernen
-        if(distance <=rad){
-            ArrayGeoTagsInRad.push(ArrayGeoTags[i]);
-        }
-    }
-    return ArrayGeoTagsInRad;
-}
-
-
-//GeoTag zum Array hinzufügen
-function addGeoTag(neuerGeoTag){
-    ArrayGeoTags[ArrayGeoTags.length]=neuerGeoTag;
-    //console.log("Array erweitert mit :"+ArrayGeoTags[ArrayGeoTags.length].name)
-}
-
-//GeoTag von Array entfernen
-function deleteGeoTag(name){
-    let pos = ArrayGeoTags.indexOf(name);
-    ArrayGeoTags.splice(pos, name);
-}*/
     
-// TODO: CODE ERGÄNZEN
+
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
@@ -133,7 +100,7 @@ app.post('/tagging', function(req, res){
         map: JSON.stringify(inMemory.ArrayGeoTags)
     });
 });
-// TODO: CODE ERGÄNZEN START
+
 
 /**
  * Route mit Pfad '/discovery' für HTTP 'POST' Requests.
@@ -156,7 +123,7 @@ app.post('/discovery', function(req, res){
         map: JSON.stringify(inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags))
     });
 })
-// TODO: CODE ERGÄNZEN
+
 
 /**
  * Setze Port und speichere in Express.

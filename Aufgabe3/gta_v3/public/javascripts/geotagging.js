@@ -95,7 +95,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
      * zoom: Zoomfaktor der Karte
      */
     var getLocationMapSrc = function(lat, lon, tags, zoom) {
-        zoom = typeof zoom !== 'undefined' ? zoom : 10;
+        zoom = typeof zoom !== 'undefined' ? zoom : 12;
 
         if (apiKey === "YOUR_API_KEY_HERE") {
             console.log("No API key provided.");
@@ -142,7 +142,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
                 
                 console.log(thisTagString)
                 /**Zoom von [0-18] wählbar*/
-                var zoom = 13;
+                //var zoom = 13;
                 var URL = getLocationMapSrc(document.getElementById("latitude").value, 
                 document.getElementById("longitude").value, 
                 thisTag, 
