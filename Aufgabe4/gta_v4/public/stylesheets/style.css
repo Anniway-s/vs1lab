@@ -1,0 +1,147 @@
+body {
+	padding: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  }
+  
+  a {
+	color: #00B7FF;
+  }
+  
+  header{
+	background-color: lightgray;
+	width: auto;
+	padding: 10px;
+	clear: both;
+  }
+  footer {
+	background-color: lightgray;
+	width: auto;
+	padding: 10px;
+	clear: both;
+  }
+  
+  
+  
+  #tag-form input {
+	display: block;
+	padding : 5px;
+	margin: 3px;
+	width: 100%;
+  
+  }
+  /* exception for the button   */
+  #tag-form input:last-child {
+	width: 60px;
+  }
+  
+  
+  #filter-form input{
+	width: 35%;
+	padding : 5px;
+	margin: 3px;
+  }
+  #filter-form input:last-child{
+	width: 60px;
+  }
+  
+  form {
+	line-height: 30px;
+  
+  }
+  
+  
+  #results{
+	padding: 5px;
+	margin-left: 5px;
+	list-style-type: none;
+  }
+  
+  /* Grid start   */
+  
+  /*first mobile phone display*/
+  [class*="col-"] {
+	width: 100%;
+  }
+  
+  * {
+	box-sizing: border-box;
+  }
+  
+  /*1 Grid = 8.33% */
+  /*Davor 1080px*/
+  @media only screen and (min-width: 1305px) {
+  .col-1 {width: 8.33%;}
+  .col-2 {width: 16.66%;}
+  .col-3 {width: 25%;}
+  .col-4 {width: 33.33%;}
+  .col-5 {width: 41.66%;}
+  .col-6 {width: 50%;}
+  .col-7 {width: 58.33%;}
+  .col-8 {width: 66.66%;}
+  .col-9 {width: 75%;}
+  .col-10 {width: 83.33%;}
+  .col-11 {width: 91.66%;}
+  .col-12 {width: 100%;}
+  }
+  
+  [class*="col-"] {
+	float: left;
+	padding: 15px;
+	border: 0px solid red; /* for testing set border: x to a positive value */
+  }
+  
+  .row::after {
+	content: "";
+	clear: both;
+	display: flex;
+  }
+  
+  .tagging {
+	display: block;
+	position: relative;
+	margin-left: 10px;
+  
+  }
+  
+  .discovery{
+	display: block;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+  }
+  
+  .taglist {
+	display: inline-block;
+	width: 100%;
+  }
+  
+  
+  
+  .tagmap{
+	position: relative;
+	float: right;
+  
+  }
+  
+  .caption{
+	font-size: 90%;
+	color: darkgray;
+  }
+  
+  
+  /*davor 605 px*/
+  @media only screen and (max-width: 760px){
+	#result-img{
+	  width: 100%;
+	  height: auto;
+	}
+  }
+  
+  li{
+	background-color: #00B7FF;
+	font-size: auto;
+	color: white;
+	margin: 15px;
+	padding: 10px;
+  }
+  
