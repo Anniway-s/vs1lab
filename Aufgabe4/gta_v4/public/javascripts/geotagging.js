@@ -114,6 +114,17 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         return urlString;
     };
 
+    var ajax = new XMLHttpRequest();
+    var btnTagging = document.getElementById("btnTagging");
+    var btnDiscovery = document.getElementById("btnDiscovery");
+    var geotagging = require("./public/javascripts/geotagging.js");
+    btnTagging.addEventListener('click', function(req,res){
+        console.log("BtnTag Click");
+        let newGeoTag = new geotagging.GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+    });
+    btnDiscovery.addEventListener('click', function(){
+        console.log("TEST'''####");
+    });
     return { // Start öffentlicher Teil des Moduls ...
 
         // Public Member

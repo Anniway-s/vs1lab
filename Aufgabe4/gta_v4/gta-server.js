@@ -37,7 +37,7 @@ app.use(express.static(__dirname + '/public'));
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
 
-function GeoTagForm(longitude, latitude, name, hashtag){
+exports.GeoTagForm=function (longitude, latitude, name, hashtag){
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
