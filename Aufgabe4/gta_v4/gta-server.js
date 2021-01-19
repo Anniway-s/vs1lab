@@ -1,3 +1,4 @@
+
 /**
  * Template für Übungsaufgabe VS1lab/Aufgabe3
  * Das Skript soll die Serverseite der gegebenen Client Komponenten im
@@ -57,7 +58,7 @@ exports.GeoTagForm=function (longitude, latitude, name, hashtag){
 var inMemory = require("./public/javascripts/inMemory.js");
 const { json } = require('body-parser');
 
-    
+
 
 
 /**

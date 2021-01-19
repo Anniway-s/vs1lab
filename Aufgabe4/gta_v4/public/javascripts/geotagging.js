@@ -1,3 +1,9 @@
+import * as geotagging from "../../gta-server";
+
+ArrayGeoTags = new Array();
+
+
+
 /* Dieses Skript wird ausgeführt, wenn der Browser index.html lädt. */
 
 // Befehle werden sequenziell abgearbeitet ...
@@ -117,14 +123,27 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     var ajax = new XMLHttpRequest();
     var btnTagging = document.getElementById("btnTagging");
     var btnDiscovery = document.getElementById("btnDiscovery");
-    var geotagging = require("./public/javascripts/geotagging.js");
     btnTagging.addEventListener('click', function(req,res){
         console.log("BtnTag Click");
         let newGeoTag = new geotagging.GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+        ajax.open("POST","/",true);
+        ajax.send(null);
+        ajax.onreadystatechange = function() {
+            // Zustand von Interesse
+            if (ajax.readyState == 4) {
+                exports.addGeoTag = function (neuerGeoTag, ArrayGeoTags) {
+                    ArrayGeoTags.push(newGeoTag);
+                    //console.log("Array erweitert mit :"+ArrayGeoTags[ArrayGeoTags.length].name)
+                }
+            }
+        }; //Ende der Funktion
+
     });
     btnDiscovery.addEventListener('click', function(){
         console.log("TEST'''####");
     });
+
+
     return { // Start öffentlicher Teil des Moduls ...
 
         // Public Member
