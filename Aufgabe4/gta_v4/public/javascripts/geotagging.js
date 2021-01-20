@@ -154,7 +154,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 	function geoTag(){
 		ajax.open('POST', './tagging', true);
         ajax.overrideMimeType("json");
-		ajax.setRequestHeader("application/json","requestOfTagging");
+		ajax.setRequestHeader("Content-Type","JSON");
 		ajax.send(null);
         ajax.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200){
@@ -168,7 +168,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 	function arrayTags(){
         ajax.open('GET', './tagging', true);
         ajax.overrideMimeType("json");
-        ajax.setRequestHeader("application/json","requestOfDiscovery");
+        ajax.setRequestHeader("Content-Type","JSON");
         ajax.send(null);
         ajax.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200){

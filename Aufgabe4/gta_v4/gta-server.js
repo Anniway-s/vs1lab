@@ -94,6 +94,8 @@ app.get('/', function(req, res) {
  * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
  */
 app.post('/tagging', function(req, res){
+   console.log("Posting...");
+    /*
     let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
     inMemory.addGeoTag(newGeoTag, inMemory.ArrayGeoTags);
     res.render('gta', {
@@ -102,6 +104,8 @@ app.post('/tagging', function(req, res){
         longitude: req.body.longitude,
         map: JSON.stringify(inMemory.ArrayGeoTags)
     });
+
+     */
 });
 
 
@@ -117,7 +121,8 @@ app.post('/tagging', function(req, res){
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
 app.post('/discovery', function(req, res){
-    console.log("lat,long,term: " + req.body.current_latitude +" " + req.body.current_longitude +" " +  req.body.search_term);
+    console.log("Discovering...");
+    /*console.log("lat,long,term: " + req.body.current_latitude +" " + req.body.current_longitude +" " +  req.body.search_term);
     console.log("search: " + req.body.search_term);
     res.render('gta',{
         taglist: inMemory.searchGeoTagInRad(100,req.body.current_latitude,req.body.current_longitude, inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags)),
@@ -125,6 +130,8 @@ app.post('/discovery', function(req, res){
         longitude: req.body.current_longitude,
         map: JSON.stringify(inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags))
     });
+
+     */
 })
 
 
