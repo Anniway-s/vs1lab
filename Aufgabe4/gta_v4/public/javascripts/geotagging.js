@@ -153,18 +153,35 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 	//Zugehörige Funktionen zu den Events
 	function geoTag(){
 		ajax.onreadystatechange = function() {
-			if (this.readyState === 4 && this.status === 200)
-				alert(this.responseText); // Here is the response
+			if (this.readyState === 4 && this.status === 200){
+				//Was mit den Ergebnissen gemacht werden soll und hier auch die Ergebnisse ins DOM "einpflegen"
+
+			}
 		}
+		ajax.overrideMimeType("json");
 		ajax.open('POST', '/tagging', true);
+		ajax.setRequestHeader("application/css");
 		ajax.send(null);
+
+		var thisTag;
+        var thisTagString = document.getElementById("result-img").getAttribute("data-tags");
+        if(thisTagString !== ""){
+            thisTag = JSON.parse(thisTagString);
+        }
+		var zoom = 13;
 		
-		 
+		var URL = getLocationMapSrc(document.getElementById("latitude").value, 
+                document.getElementById("longitude").value, 
+                thisTag, 
+                zoom);
+		var map = document.getElementById("result-img");
+		map.setAttribute ("src" , URL);
 		
+		document.getElementById('results').value=ajax.responseText;
 	}
 
 	function arrayTags(){
-		ajax.open('GET', "url", true);
+		ajax.open('GET', '/discovery', true);
 		ajax.send(null);
 	}
 
@@ -196,7 +213,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
                 
                 console.log(thisTagString)
                 /**Zoom von [0-18] wählbar*/
-                //var zoom = 13;
+                var zoom = 13;
                 var URL = getLocationMapSrc(document.getElementById("latitude").value, 
                 document.getElementById("longitude").value, 
                 thisTag, 
@@ -209,7 +226,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
                 },function(error){
                     alert(error);
                 });
-            }else{
+            }/*else{
                 var zoom;
                 var thisTag;
                 var thisTagString = document.getElementById("result-img").getAttribute("data-tags");
@@ -225,7 +242,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
                 var map = document.getElementById("result-img");
                 map.setAttribute ("src" , URL)
 
-            }
+            }*/
 
         }
 
