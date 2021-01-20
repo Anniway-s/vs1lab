@@ -58,7 +58,6 @@ GeoTagForm=function (longitude, latitude, name, hashtag){
  * - Funktion zum Löschen eines Geo Tags.
  */
 
-var inMemory = require("./public/javascripts/inMemory.js");
 const { json } = require('body-parser');
 
 

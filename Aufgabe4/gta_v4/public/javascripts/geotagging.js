@@ -152,39 +152,49 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
 	//Zugehörige Funktionen zu den Events
 	function geoTag(){
-		ajax.onreadystatechange = function() {
-			if (this.readyState === 4 && this.status === 200){
-				//Was mit den Ergebnissen gemacht werden soll und hier auch die Ergebnisse ins DOM "einpflegen"
-
-			}
-		}
-		ajax.overrideMimeType("json");
-		ajax.open('POST', '/tagging', true);
-		ajax.setRequestHeader("application/css");
+		ajax.open('POST', './tagging', true);
+        ajax.overrideMimeType("json");
+		ajax.setRequestHeader("application/json","requestOfTagging");
 		ajax.send(null);
-
-		var thisTag;
-        var thisTagString = document.getElementById("result-img").getAttribute("data-tags");
-        if(thisTagString !== ""){
-            thisTag = JSON.parse(thisTagString);
+        ajax.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200){
+                alert(ajax.responseText);
+                updateMap();
+            }
         }
-		var zoom = 13;
-		
-		var URL = getLocationMapSrc(document.getElementById("latitude").value, 
-                document.getElementById("longitude").value, 
-                thisTag, 
-                zoom);
-		var map = document.getElementById("result-img");
-		map.setAttribute ("src" , URL);
-		
-		document.getElementById('results').value=ajax.responseText;
+
 	}
 
 	function arrayTags(){
-		ajax.open('GET', '/discovery', true);
-		ajax.send(null);
+        ajax.open('GET', './tagging', true);
+        ajax.overrideMimeType("json");
+        ajax.setRequestHeader("application/json","requestOfDiscovery");
+        ajax.send(null);
+        ajax.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200){
+                alert(ajax.responseText);
+                updateMap();
+            }
+        }
 	}
 
+	function updateMap() {
+        let thisTag;
+        let thisTagString = document.getElementById("result-img").getAttribute("data-tags");
+        if (thisTagString !== "") {
+            console.thisTag = JSON.parse(thisTagString);
+        }
+        let zoom = 13;
+
+        let URL = getLocationMapSrc(document.getElementById("latitude").value,
+            document.getElementById("longitude").value,
+            thisTag,
+            zoom);
+        let map = document.getElementById("result-img");
+        map.setAttribute("src", URL);
+
+        //document.getElementById('results').value = ajax.responseText;
+    }
     return { // Start öffentlicher Teil des Moduls ...
 
         // Public Member
@@ -226,7 +236,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
                 },function(error){
                     alert(error);
                 });
-            }/*else{
+            }else{
                 var zoom;
                 var thisTag;
                 var thisTagString = document.getElementById("result-img").getAttribute("data-tags");
@@ -241,8 +251,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
                 //Suchen und ersetzen
                 var map = document.getElementById("result-img");
                 map.setAttribute ("src" , URL)
-
-            }*/
+            }
 
         }
 
