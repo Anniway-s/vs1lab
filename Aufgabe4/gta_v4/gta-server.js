@@ -132,7 +132,11 @@ app.post('/discovery', function(req, res){
     });
 
      */
-})
+});
+
+app.post('/geotags',function(req,res){
+
+});
 
 
 /**
