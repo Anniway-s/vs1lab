@@ -26,6 +26,9 @@ app.use(bodyParser.json());
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
 
+//Array für die Tags
+ArrayGeoTags = new Array();
+
 /**
  * Konfiguriere den Pfad für statische Dateien.
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
@@ -38,7 +41,7 @@ app.use(express.static(__dirname + '/public'));
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
 
-exports.GeoTagForm=function (longitude, latitude, name, hashtag){
+GeoTagForm=function (longitude, latitude, name, hashtag){
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
