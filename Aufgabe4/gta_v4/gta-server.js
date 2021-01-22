@@ -86,7 +86,7 @@ app.get('/', function(req, res) {
 
 
 app.post('/geotags',function(req,res){
-    while(ArrayGeoTags[idVar].Location=='/'+idVar){
+    while(ArrayGeoTags[idVar].Location=='/'+idVar &&ArrayGeoTags[idVar].Location){ //FEHLER BEI 1. aufruf weil UNDEFINED
         ++idVar;
     }; //ist die id durch zb einen PUT schon im voraus vergeben? wir wollen ja hier nicht ersetzen
 
