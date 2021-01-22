@@ -40,14 +40,14 @@ app.use(express.static(__dirname + '/public'));
  * Konstruktor für GeoTag Objekte.
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
-var id=0;
+var idVar=0;
 GeoTagForm=function (longitude, latitude, name, hashtag){
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
     this.hashtag = hashtag;
-    this.id= id;
-    id++;
+    this.id= idVar;
+    idVar++;
     return this;
 }
 
@@ -87,21 +87,32 @@ app.get('/', function(req, res) {
 
 app.post('/geotags',function(req,res){
     let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-
-    res.status(201).json({
+    let newJson ={
         msg: 'success, created',
         obj: newGeoTag,
         Location: '/' +newGeoTag.id,
-    });
-    ArrayGeoTags.push(res.json);
-    console.log(JSON.stringify(ArrayGeoTags));
+    };
+    res.status(201).json(newJson);
+    if(newJson.Location!=='/0'){
+        ArrayGeoTags.push(newJson);
+    }
+
+
+});
+
+app.get('/geotags',function(req,res){
+    console.log("ArrayGet: "+JSON.stringify(ArrayGeoTags));
+    res.status(200).json(
+        ArrayGeoTags
+    );
+    res.end();
 });
 
 app.get('/geotags/:Location',function(req,res){
-
     res.status(200).json(
-        JSON.stringify(ArrayGeoTags)
+        ArrayGeoTags[req.params.Location]
     );
+    res.end();
 });
 
 app.put('/geotags',function(req,res){
@@ -112,6 +123,7 @@ app.put('/geotags',function(req,res){
         obj: newGeoTag,
         Location: '/' +newGeoTag.id,
     });
+    res.end();
 });
 
 app.delete('/geotags/:Location',function(req,res){
