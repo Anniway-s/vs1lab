@@ -155,14 +155,14 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		ajax.open('POST', './tagging', true);
         ajax.overrideMimeType("json");
 		ajax.setRequestHeader("Content-Type","JSON");
+		//Object erstellen
 		ajax.send(null);
         ajax.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200){
-                alert(ajax.responseText);
-                updateMap();
+                let response = JSON.parse(ajax.response);
+                updateMap(response);
             }
         }
-
 	}
 
 	function arrayTags(){
@@ -178,7 +178,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         }
 	}
 
-	function updateMap() {
+	function updateMap(JSON resp) {
         let thisTag;
         let thisTagString = document.getElementById("result-img").getAttribute("data-tags");
         if (thisTagString !== "") {

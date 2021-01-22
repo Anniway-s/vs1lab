@@ -40,12 +40,14 @@ app.use(express.static(__dirname + '/public'));
  * Konstruktor für GeoTag Objekte.
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
-
+var id=0;
 GeoTagForm=function (longitude, latitude, name, hashtag){
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
     this.hashtag = hashtag;
+    this.id= id;
+    id++;
     return this;
 }
 
@@ -81,63 +83,47 @@ app.get('/', function(req, res) {
     });
 });
 
-/**
- * Route mit Pfad '/tagging' für HTTP 'POST' Requests.
- * (http://expressjs.com/de/4x/api.html#app.post.method)
- *
- * Requests enthalten im Body die Felder des 'tag-form' Formulars.
- * (http://expressjs.com/de/4x/api.html#req.body)
- *
- * Mit den Formulardaten wird ein neuer Geo Tag erstellt und gespeichert.
- *
- * Als Response wird das ejs-Template mit Geo Tag Objekten gerendert.
- * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
- */
-app.post('/tagging', function(req, res){
-   console.log("Posting...");
-    /*
-    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-    inMemory.addGeoTag(newGeoTag, inMemory.ArrayGeoTags);
-    res.render('gta', {
-        taglist: inMemory.searchGeoTagInRad(100,req.body.longitude,req.body.latitude, inMemory.ArrayGeoTags),
-        latitude:req.body.latitude,
-        longitude: req.body.longitude,
-        map: JSON.stringify(inMemory.ArrayGeoTags)
-    });
 
-     */
-});
-
-
-/**
- * Route mit Pfad '/discovery' für HTTP 'POST' Requests.
- * (http://expressjs.com/de/4x/api.html#app.post.method)
- *
- * Requests enthalten im Body die Felder des 'filter-form' Formulars.
- * (http://expressjs.com/de/4x/api.html#req.body)
- *
- * Als Response wird das ejs-Template mit Geo Tag Objekten gerendert.
- * Die Objekte liegen in einem Standard Radius um die Koordinate (lat, lon).
- * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
- */
-app.post('/discovery', function(req, res){
-    console.log("Discovering...");
-    /*console.log("lat,long,term: " + req.body.current_latitude +" " + req.body.current_longitude +" " +  req.body.search_term);
-    console.log("search: " + req.body.search_term);
-    res.render('gta',{
-        taglist: inMemory.searchGeoTagInRad(100,req.body.current_latitude,req.body.current_longitude, inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags)),
-        latitude: req.body.current_latitude,
-        longitude: req.body.current_longitude,
-        map: JSON.stringify(inMemory.searchGeoTagByTag(req.body.search_term, inMemory.ArrayGeoTags))
-    });
-
-     */
-});
 
 app.post('/geotags',function(req,res){
-
+    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+    ArrayGeoTags.push(newGeoTag);
+    res.status(201).json({
+        msg: 'success, created',
+        obj: newGeoTag,
+        URI: './'+newGeoTag.id,
+    });
 });
 
+app.get('/geotags',function(req,res){
+    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+    ArrayGeoTags.push(newGeoTag);
+    res.status(201).json({
+        msg: 'success, created',
+        obj: newGeoTag,
+        URI: './'+newGeoTag.id,
+    });
+});
+
+app.put('/geotags',function(req,res){
+    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+    ArrayGeoTags.push(newGeoTag);
+    res.status(201).json({
+        msg: 'success, created',
+        obj: newGeoTag,
+        URI: './'+newGeoTag.id,
+    });
+});
+
+app.delete('/geotags',function(req,res){
+    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+    ArrayGeoTags.push(newGeoTag);
+    res.status(201).json({
+        msg: 'success, created',
+        obj: newGeoTag,
+        URI: './'+newGeoTag.id,
+    });
+});
 
 /**
  * Setze Port und speichere in Express.
