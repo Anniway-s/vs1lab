@@ -86,6 +86,10 @@ app.get('/', function(req, res) {
 
 
 app.post('/geotags',function(req,res){
+    while(ArrayGeoTags[idVar].Location=='/'+idVar){
+        ++idVar;
+    }; //ist die id durch zb einen PUT schon im voraus vergeben? wir wollen ja hier nicht ersetzen
+
     let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
     let newJson ={
         msg: 'success, created',
@@ -96,8 +100,6 @@ app.post('/geotags',function(req,res){
     if(newJson.Location!=='/0'){
         ArrayGeoTags.push(newJson);
     }
-
-
 });
 
 app.get('/geotags',function(req,res){
@@ -115,20 +117,24 @@ app.get('/geotags/:Location',function(req,res){
     res.end();
 });
 
-app.put('/geotags',function(req,res){
+app.put('/geotags/:Location',function(req,res){
     let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-    ArrayGeoTags.push(newGeoTag);
-    res.status(201).json({
+    let newJson ={
         msg: 'success, created',
         obj: newGeoTag,
         Location: '/' +newGeoTag.id,
-    });
-    res.end();
+    };
+    res.status(201).json(newJson);
+
+    ArrayGeoTags[newGeoTag.id]=newJson; //überschreiben
+
 });
 
 app.delete('/geotags/:Location',function(req,res){
-    delete req[req.params.Location];
-    res.status(200);
+    ArrayGeoTags.splice(req.params.obj.id);
+    idVar--; //Arrayindex anpassen um keine Lücke zu haben
+    res.status(205).json(null);
+
 });
 
 /**
