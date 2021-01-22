@@ -87,22 +87,21 @@ app.get('/', function(req, res) {
 
 app.post('/geotags',function(req,res){
     let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-    ArrayGeoTags.push(newGeoTag);
+
     res.status(201).json({
         msg: 'success, created',
         obj: newGeoTag,
-        URI: './'+newGeoTag.id,
+        Location: '/' +newGeoTag.id,
     });
+    ArrayGeoTags.push(res.json);
+    console.log(JSON.stringify(ArrayGeoTags));
 });
 
-app.get('/geotags',function(req,res){
-    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-    ArrayGeoTags.push(newGeoTag);
-    res.status(201).json({
-        msg: 'success, created',
-        obj: newGeoTag,
-        URI: './'+newGeoTag.id,
-    });
+app.get('/geotags/:Location',function(req,res){
+
+    res.status(200).json(
+        JSON.stringify(ArrayGeoTags)
+    );
 });
 
 app.put('/geotags',function(req,res){
@@ -111,18 +110,13 @@ app.put('/geotags',function(req,res){
     res.status(201).json({
         msg: 'success, created',
         obj: newGeoTag,
-        URI: './'+newGeoTag.id,
+        Location: '/' +newGeoTag.id,
     });
 });
 
-app.delete('/geotags',function(req,res){
-    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-    ArrayGeoTags.push(newGeoTag);
-    res.status(201).json({
-        msg: 'success, created',
-        obj: newGeoTag,
-        URI: './'+newGeoTag.id,
-    });
+app.delete('/geotags/:Location',function(req,res){
+    delete req[req.params.Location];
+    res.status(200);
 });
 
 /**
