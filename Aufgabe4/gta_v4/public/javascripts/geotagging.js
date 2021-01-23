@@ -135,7 +135,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		ajax.onreadystatechange = function() {
             if (this.readyState === 4 && (this.status <= 299 && this.status > 199)){
 				console.log(ajax.response.obj + "neuer Scheiß")
-                URLneuer = updateMap(ajax.responseJSON);
+                URLneuer = updateMap(ajax.responseType="json");
             }
 		}
 		//Object erstellen
@@ -149,7 +149,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         ajax.setRequestHeader("Content-Type","application/json");
 		ajax.onreadystatechange = function() {
             if (this.readyState === 4 && (this.status <= 299 && this.status > 199)){
-                let response = JSON.parse(ajax.responseJSON);
+                let response = JSON.parse(ajax.responseType="json");
                 updateMap(response);
             }
         }
