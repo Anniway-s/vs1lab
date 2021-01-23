@@ -105,7 +105,7 @@ app.post('/geotags',function(req,res){
         Location: '/' +newGeoTag.id,
     });
     //if(newJson.Location!=='/0'){
-        ArrayGeoTags.push(newJson);//Wieso newJson und nicht newGeoTag???
+        ArrayGeoTags.push(newGeoTag);//Wieso newJson und nicht newGeoTag???
     //}
 });
 
@@ -132,9 +132,9 @@ app.put('/geotags/:Location',function(req,res){
         Location: '/' +newGeoTag.id,
     };
     res.status(201).json(newJson);
-	/* Das hier bringt nichts
-    ArrayGeoTags[newGeoTag.id]=newJson; //überschreiben
-	*/
+
+    ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
+
 });
 
 app.delete('/geotags/:Location',function(req,res){
