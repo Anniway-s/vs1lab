@@ -86,20 +86,27 @@ app.get('/', function(req, res) {
 
 
 app.post('/geotags',function(req,res){
+	/*
     while(ArrayGeoTags[idVar].Location=='/'+idVar &&ArrayGeoTags[idVar].Location){ //FEHLER BEI 1. aufruf weil UNDEFINED
         ++idVar;
     }; //ist die id durch zb einen PUT schon im voraus vergeben? wir wollen ja hier nicht ersetzen
-
-    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+	*/
+	console.log(req.body);
+	let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+	console.log(newGeoTag);
     let newJson ={
         msg: 'success, created',
         obj: newGeoTag,
         Location: '/' +newGeoTag.id,
     };
-    res.status(201).json(newJson);
-    if(newJson.Location!=='/0'){
-        ArrayGeoTags.push(newJson);
-    }
+    res.status(201).json({
+        msg: 'success, created',
+        obj: newGeoTag,
+        Location: '/' +newGeoTag.id,
+    });
+    //if(newJson.Location!=='/0'){
+        ArrayGeoTags.push(newJson);//Wieso newJson und nicht newGeoTag???
+    //}
 });
 
 app.get('/geotags',function(req,res){
@@ -125,9 +132,9 @@ app.put('/geotags/:Location',function(req,res){
         Location: '/' +newGeoTag.id,
     };
     res.status(201).json(newJson);
-
+	/* Das hier bringt nichts
     ArrayGeoTags[newGeoTag.id]=newJson; //überschreiben
-
+	*/
 });
 
 app.delete('/geotags/:Location',function(req,res){
