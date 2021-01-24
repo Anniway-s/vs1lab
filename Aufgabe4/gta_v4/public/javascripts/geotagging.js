@@ -103,7 +103,8 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         }
 
         var tagList = "&pois=You," + lat + "," + lon;
-        if (tags !== undefined) tags.forEach(function(tag) {
+        console.log("TagList #"+tags+" l:"+tags.length);
+        if (tags[0] !== '') tags.forEach(function(tag) {
             tagList += "|" + tag.name + "," + tag.latitude + "," + tag.longitude;
         });
         console.log(tagList)
@@ -123,13 +124,13 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 	btnTagging.addEventListener('click' , function(){
 
 		//Werte aus dem Dokument speichern
-		var latitude = document.getElementById().value;
-		var longitude = document.getElementById().value;
-		var name = document.getElementById().value;
-		var hashtag = document.getElementById().value;
+		var latitude = document.getElementById("latitude").value;
+		var longitude = document.getElementById("longitude").value;
+		var name = document.getElementById("name").value;
+		var hashtag = document.getElementById("hashtag").value;
 
 		//Die Daten die gesendet werden sollen
-		var tag = (latitude, longitude, name, hashtag);
+		//var tag = {lat: latitude, long:longitude, nam: name, hash: hashtag}
 
 		//Ajax Objekt erstellen
 		var ajax = new XMLHttpRequest();
@@ -137,16 +138,17 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		//Den POST aufruf
 		ajax.open('POST', '/geotags', true);
 		ajax.setRequestHeader('Content-Type', 'application/json');
-		ajax.send(JSON.stringify(tag));
+		ajax.send();
 
 		//Auf den Status warten
 		ajax.onreadystatechange = function() {
-			if(ajax.readyState === 4 && ajax.status === 201){
-				console.log(ajax.response);
+
+			if(ajax.readyState === 4 && (ajax.status === 201 ||ajax.status === 200)){
+				console.log("##resonse nach btn "+JSON.stringify(ajax.response));
 				list = JSON.parse(ajax.response);//Ja nein?
 				gtaLocator.updateData(latitude, longitude, list);//Ja nein?
 			}else if(ajax.readyState === 4){
-				console.log(ajax.statusText);
+				console.log("## Status nach readystat 4: "+ajax.statusText);
 				alert("Naaaah das sollte so nicht sein")
 			}
 		};
@@ -165,7 +167,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
 		//Suche mit einem Hashtag für senden vorbereiten
 		if(searchTerm[0] === '#'){
-			searchTerm = searchTerm.replace("#" , "%56");
+			searchTerm = searchTerm.replace("#" , "%23");
 			console.log("Suchbegriff ist nun:\t" + searchTerm);
 		}else{
 			console.log("Kein '#' vorhanden. Suchwort ist:\t" + searchTerm)
@@ -179,6 +181,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		//Auf Status warten
 		ajax.onreadystatechange = function() {
 			if(ajax.readyState === 4 && ajax.status === 200){
+
 				list = JSON.parse(ajax.response);
 				gtaLocator.updateData(latitude, longitude, list);
 			}else if(ajax.readyState === 4){
@@ -196,8 +199,13 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 			//Orte der Werte Zwischenspeichern
 			var latitude = document.getElementById("current_latitude").getAttribute("value");
 			var longitude = document.getElementById("current_longitude").getAttribute("value");
-			var dataTags = JSON.parse(document.getElementById("result-img").getAttribute("data-tags"));
-			
+			var dataTags;
+			console.log("datatag"+document.getElementById("result-img").getAttribute("data-tags")+"|end");
+			if(document.getElementById("result-img").getAttribute("data-tags") !== '') {
+				dataTags = JSON.parse(document.getElementById("result-img").getAttribute("data-tags"));
+			}else {
+				dataTags=[''];
+			}
 			if(document.getElementById("longitude").value == "" && document.getElementById("latitude").value == ""){
 				//Bei erstem Aufruf
 				tryLocate(function(c){
@@ -207,7 +215,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
 					//Map URL herstellen
 					let mapURL = getLocationMapSrc(latitude, longitude, dataTags);
-
+					console.log("MapURL: "+mapURL);
 					//Input für die Werte setzten
 					document.getElementById("latitude").value = latitude;
 					document.getElementById("longitude").value = longitude;

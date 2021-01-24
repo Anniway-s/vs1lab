@@ -92,9 +92,8 @@ app.get('/', function(req, res) {
 
 app.post('/geotags',function(req,res){
 	let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-	console.log(req.body.obj + "\n\n");
-	console.log("\n\n" + newGeoTag);
 	inMemory.addGeoTag(newGeoTag, ArrayGeoTags);
+	console.log("##new geo tag in POST: "+newGeoTag);
 	var url = 'http://' + req.get('host') + req.url + '/' + newGeoTag.id;
 	res.status(201).location(url).send();
 });
