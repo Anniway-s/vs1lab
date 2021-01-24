@@ -136,9 +136,15 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		var ajax = new XMLHttpRequest();
 
 		//Den POST aufruf
-		ajax.open('POST', '/geotags', true);
-		ajax.setRequestHeader('Content-Type', 'application/json');
-		ajax.send(JSON.stringify(tag));
+		if(latitude!=='' && longitude!=='' && name !==''){
+			ajax.open('POST', '/geotags', true);
+			ajax.setRequestHeader('Content-Type', 'application/json');
+			ajax.send(JSON.stringify(tag));
+		}else{
+			alert("Name, Longitude & Latitude have to be filled out");
+		}
+
+
 
 		//Auf den Status warten
 		ajax.onreadystatechange = function() {
@@ -197,7 +203,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 			var latitude = document.getElementById("current_latitude").getAttribute("value");
 			var longitude = document.getElementById("current_longitude").getAttribute("value");
 			var dataTags;
-			console.log("datatag"+document.getElementById("result-img").getAttribute("data-tags")+"|end");
+			console.log("data-tag"+document.getElementById("result-img").getAttribute("data-tags")+"|end");
 			if(document.getElementById("result-img").getAttribute("data-tags") !== '') {
 				dataTags = JSON.parse(document.getElementById("result-img").getAttribute("data-tags"));
 			}else {
@@ -232,17 +238,15 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		updateData: function (latitude, longitude, tagsList) {
 			//document.getElementById("results").empty();
 
-			let element = document.getElementById("results");
-			let li = document.createElement("li");
+			let element = document.getElementById("results")
+			$("ul").empty();
+			var li = document.createElement("li");
 
-			console.log("###die taglist vor dem resaults :"+JSON.stringify(tagsList)+" L= "+tagsList.lenght);
-			if(tagsList.lenght!==undefined)for(let j = 0; j < tagsList.lenght; j++){
+			console.log("###die taglist vor dem resaults :"+JSON.stringify(tagsList)+" L= "+Object.keys(tagsList).length);
+
+			for(let j = 0; j < Object.keys(tagsList).length; j++){
 				let li = document.createElement("li");
 				let tag = tagsList[j].name + " (" + tagsList[j].latitude + "," + tagsList[j].longitude + ") " + tagsList[j].hashtag;
-				li.appendChild((document.createTextNode(tag)));
-				element.appendChild(li);
-			}else{
-				let tag = tagsList.name + " (" + tagsList.latitude + "," + tagsList.longitude + ") " + tagsList.hashtag;
 				li.appendChild((document.createTextNode(tag)));
 				element.appendChild(li);
 			}

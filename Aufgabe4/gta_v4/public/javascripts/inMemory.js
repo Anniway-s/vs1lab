@@ -1,7 +1,8 @@
 var ArrayGeoTags = [];
+exports.ArrayGeoTags = ArrayGeoTags;
 
 //GeoTag in das Array hiunzufügen
-exports.addGeoTag = function (neuerGeoTag, ArrayGeoTags){
+exports.addGeoTag = function (neuerGeoTag){
     ArrayGeoTags.push(neuerGeoTag);
     //console.log("Array erweitert mit :"+ArrayGeoTags[ArrayGeoTags.length].name)
 }

@@ -26,8 +26,7 @@ app.use(bodyParser.json());
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
 
-//Array für die Tags
-ArrayGeoTags = new Array();
+
 
 /**
  * Konfiguriere den Pfad für statische Dateien.
@@ -93,10 +92,10 @@ app.get('/', function(req, res) {
 app.post('/geotags',function(req,res){
 	console.log("reqest BODY: "+JSON.stringify(req.body));
 	let newGeoTag = new GeoTagForm(req.body.long,req.body.lat,req.body.nam,req.body.hash);
-	inMemory.addGeoTag(newGeoTag, ArrayGeoTags);
+	inMemory.addGeoTag(newGeoTag);
 	console.log("##new geo tag in POST: "+JSON.stringify(newGeoTag));
 	var url = 'http://' + req.get('host') + req.url + '/' + newGeoTag.id;
-	res.status(201).location(url).send(newGeoTag);
+	res.status(201).location(url).send(inMemory.ArrayGeoTags);
 });
 
 app.get('/geotags',function(req,res){
