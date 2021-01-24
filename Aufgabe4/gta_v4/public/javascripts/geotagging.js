@@ -103,8 +103,9 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         }
 
         var tagList = "&pois=You," + lat + "," + lon;
-        console.log("TagList #"+tags+" l:"+tags.length);
-        if (tags[0] !== '') tags.forEach(function(tag) {
+        console.log("TagList #"+JSON.stringify(tags)+" l:"+tags.length);
+
+        if (tags[0] !== '') Object.keys(tags).forEach(function(tag) {
             tagList += "|" + tag.name + "," + tag.latitude + "," + tag.longitude;
         });
         console.log(tagList)
@@ -130,7 +131,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		var hashtag = document.getElementById("hashtag").value;
 
 		//Die Daten die gesendet werden sollen
-		//var tag = {lat: latitude, long:longitude, nam: name, hash: hashtag}
+		var tag = {lat: latitude, long:longitude, nam: name, hash: hashtag}
 
 		//Ajax Objekt erstellen
 		var ajax = new XMLHttpRequest();
@@ -138,15 +139,14 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		//Den POST aufruf
 		ajax.open('POST', '/geotags', true);
 		ajax.setRequestHeader('Content-Type', 'application/json');
-		ajax.send();
+		ajax.send(JSON.stringify(tag));
 
 		//Auf den Status warten
 		ajax.onreadystatechange = function() {
 
 			if(ajax.readyState === 4 && (ajax.status === 201 ||ajax.status === 200)){
-				console.log("##resonse nach btn "+JSON.stringify(ajax.response));
-				list = JSON.parse(ajax.response);//Ja nein?
-				gtaLocator.updateData(latitude, longitude, list);//Ja nein?
+				console.log("##resonse nach btn "+ajax.response);
+				gtaLocator.updateData(latitude, longitude, JSON.parse(ajax.response));//Ja nein?
 			}else if(ajax.readyState === 4){
 				console.log("## Status nach readystat 4: "+ajax.statusText);
 				alert("Naaaah das sollte so nicht sein")
@@ -233,7 +233,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 			
 		},
 		updateData: function (latitude, longitude, tagsList) {
-			document.getElementById("results").empty();
+			//document.getElementById("results").empty();
 			for(var j = 0; j < tagsList.lenght; j++){
 				document.getElementById("results").append("<li>" + tagsList[j].name 
 				+ " (" + tagsList[j].latitude + "," + tagsList[j].longitude + ") " + tagsList[j].hashtag + "</li>");

@@ -91,11 +91,12 @@ app.get('/', function(req, res) {
 
 
 app.post('/geotags',function(req,res){
-	let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
+	console.log("reqest BODY: "+JSON.stringify(req.body));
+	let newGeoTag = new GeoTagForm(req.body.long,req.body.lat,req.body.nam,req.body.hash);
 	inMemory.addGeoTag(newGeoTag, ArrayGeoTags);
-	console.log("##new geo tag in POST: "+newGeoTag);
+	console.log("##new geo tag in POST: "+JSON.stringify(newGeoTag));
 	var url = 'http://' + req.get('host') + req.url + '/' + newGeoTag.id;
-	res.status(201).location(url).send();
+	res.status(201).location(url).send(newGeoTag);
 });
 
 app.get('/geotags',function(req,res){
