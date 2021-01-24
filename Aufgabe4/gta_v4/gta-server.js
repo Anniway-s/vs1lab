@@ -145,7 +145,7 @@ app.put('/geotags/:Location',function(req,res){
     inMemory.addGeoTag(newGeoTag);
     res.status(200).send(newGeoTag);
 
-    ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
+    inMemory.ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
 
 });
 

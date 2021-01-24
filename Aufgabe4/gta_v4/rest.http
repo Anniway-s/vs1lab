@@ -1,0 +1,32 @@
+###
+GET http://localhost:3000
+
+###
+GET http://localhost:3000/geotags
+
+###
+POST http://localhost:3000/geotags
+
+
+
+
+
+
+
+###
+PUT /geotags/0 HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{
+	"lat": 43,
+	"long": 40,
+	"nam": "meh",
+	"hash": "#home"
+}
+
+###
+DELETE http://localhost:3000/1
+
+###
+GET http://localhost:3000/geotags/0
