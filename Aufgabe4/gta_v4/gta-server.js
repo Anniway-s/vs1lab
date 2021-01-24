@@ -39,17 +39,17 @@ app.use(express.static(__dirname + '/public'));
  * Konstruktor für GeoTag Objekte.
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
-var idVar=0;
+var location=0;
 GeoTagForm=function ( latitude, longitude, name, hashtag, id){
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
 	this.hashtag = hashtag;
 	if(id === undefined){
-		this.id= idVar;
-    	idVar++;
+		this.location= location;
+    	location++;
 	}else{
-		this.id = id;
+		this.location = location;
 	}
     
     return this;
@@ -118,9 +118,10 @@ app.get('/geotags',function(req,res){
 
 });
 
-app.get('/geotags/:Location',function(req,res){
+app.get('/geotags/:location',function(req,res){
 	var location = parseInt(req.params.location);
 	var currentTag = inMemory.tagWithID(location);
+	console.log("current Tag in Search ist: ##" + currentTag);
 	if(currentTag === undefined){
 		res.status(404).send();
 	}else{
@@ -128,23 +129,26 @@ app.get('/geotags/:Location',function(req,res){
 	}
 });
 
-app.delete('/geotags/:Location',function(req,res){
-    var location = parseInt(req.params.location);
+
+
+app.delete('/geotags/:location',function(req,res){
+    var location = parseInt(req.query.location);
 	var currentTag = inMemory.tagWithID(location);
-	if(currentTag === undefined){
-		res.status(404).send();
+	if(currentTag !== undefined){
+		res.status(404).send(); //##Es geht immer hier rein -> tagWithID stimmt nicht
 	}else{
-		inMemory.deleteGeoTag(location);
-		res.status(200).send();
+		inMemory.deleteGeoTag(location); //##Ob das hier Stimmt weiß ich nicht
+		res.status(200).send("OK");
 	}
 });
 
-app.put('/geotags/:Location',function(req,res){
-	var location = parseInt(req.params.location);
-    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag, location);
-    inMemory.addGeoTag(newGeoTag);
-	inMemory.ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
-    res.status(200).send(newGeoTag);
+app.put('/geotags/:location',function(req,res){
+	var location = (req.query.location); //###Ist "undefinde"
+    let newGeoTag = new GeoTagForm(req.body.lat,req.body.long,req.body.nam,req.body.hash, location);
+	inMemory.addGeoTagWithLocation(newGeoTag, location);
+	//inMemory.ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
+	res.status(200).send(newGeoTag);
+	
 });
 
 /**

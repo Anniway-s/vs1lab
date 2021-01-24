@@ -7,26 +7,38 @@ exports.addGeoTag = function (neuerGeoTag){
     //console.log("Array erweitert mit :"+ArrayGeoTags[ArrayGeoTags.length].name)
 }
 
+exports.addGeoTagWithLocation = function (neuerGeoTag, location){
+	ArrayGeoTags.splice(location, 1, neuerGeoTag);
+}
+
 //Funktion zum Löschen
-exports.deleteGeoTag = function (name, ArrayGeoTags){
-    let pos = ArrayGeoTags.indexOf(name);
-    ArrayGeoTags.splice(pos, name);
+ exports.deleteGeoTag = function(location){//Überarbeiten
+	let b;
+	for(let i = 0; i < ArrayGeoTags.length; i++){
+		if(ArrayGeoTags[i].location === parseInt(location)){
+			ArrayGeoTags.splice(b, 1);
+		}
+	}
+    
 };
+//Suche nach einem Tag mit vorhandener ID
+exports.tagWithID = function(location){//Überarbeiten
+	console.log(location);
+	for(var i = 0; i < ArrayGeoTags.length; i++){
+		if(ArrayGeoTags[i].location === parseInt(location)){
+			return ArrayGeoTags[i];
+		}
+	}
+	return undefined;
+}	
+
 
 //Eine Liste Aller Teile
 exports.allGeoTags = function(){
 	return ArrayGeoTags;
 }
 
-//Suche nach einem Tag mit vorhandener ID
-exports.tagWithID = function(id){
-	for(var i = 0; i < ArrayGeoTags.length; i++){
-		if(ArrayGeoTags[i].id === id){
-			return ArrayGeoTags[i];
-		}
-	}
-	return undefined;
-}	
+
 
 //Alle Tags mit passendem Namen
 exports.searchGeoTagByTag = function (tag){

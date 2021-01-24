@@ -109,7 +109,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         };
         console.log(tagList)
         var urlString = "https://www.mapquestapi.com/staticmap/v4/getmap?key=" +
-            apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lon + "," + lat + "&" + tagList;
+            apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lat + "," + lon + "&" + tagList;
 
         console.log("Generated Maps Url: " + urlString);
         return urlString;
@@ -164,8 +164,8 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
 		//Werte aus dem Dokument entnehmen
 		var searchTerm = document.getElementById("search_term").value;
-		var latitude = document.getElementById("current_longitude").value;
-		var longitude = document.getElementById("current_latitude").value;
+		var longitude = document.getElementById("current_longitude").value;
+		var latitude = document.getElementById("current_latitude").value;
 
 		//Ajax Objekt erstellen
 		var ajax = new XMLHttpRequest();
