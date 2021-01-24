@@ -95,7 +95,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
      * zoom: Zoomfaktor der Karte
      */
     var getLocationMapSrc = function(lat, lon, tags, zoom) {
-        zoom = typeof zoom !== 'undefined' ? zoom : 12;
+        zoom = typeof zoom !== 'undefined' ? zoom : 10;
 
         if (apiKey === "YOUR_API_KEY_HERE") {
             console.log("No API key provided.");
@@ -104,10 +104,9 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
         var tagList = "&pois=You," + lat + "," + lon;
         console.log("TagList #"+JSON.stringify(tags)+" l:"+tags.length);
-
-        if (tags[0] !== '') Object.keys(tags).forEach(function(tag) {
-            tagList += "|" + tag.name + "," + tag.latitude + "," + tag.longitude;
-        });
+        if (tags[0] !== '') for(let i=0; i<tags.length; i++){
+            tagList += "|" + tags[i].name + "," + tags[i].latitude + "," + tags[i].longitude;
+        };
         console.log(tagList)
         var urlString = "https://www.mapquestapi.com/staticmap/v4/getmap?key=" +
             apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lat + "," + lon + "&" + tagList;
@@ -122,7 +121,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 	var btnDiscovery = document.getElementById("btnDiscovery");
 
 	//Jeweiligen Eventlistener
-	btnTagging.addEventListener('click' , function(){
+	btnTagging.addEventListener('click' , function(event){
 
 		//Werte aus dem Dokument speichern
 		var latitude = document.getElementById("latitude").value;
@@ -154,7 +153,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		};
 		event.preventDefault();
 	});
-	btnDiscovery.addEventListener('click' , function(){
+	btnDiscovery.addEventListener('click' , function(event){
 		event.preventDefault();
 
 		//Werte aus dem Dokument entnehmen
@@ -181,9 +180,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		//Auf Status warten
 		ajax.onreadystatechange = function() {
 			if(ajax.readyState === 4 && ajax.status === 200){
-
-				list = JSON.parse(ajax.response);
-				gtaLocator.updateData(latitude, longitude, list);
+				gtaLocator.updateData(latitude, longitude, JSON.parse(ajax.response));
 			}else if(ajax.readyState === 4){
 				console.log(ajax.statusText);
 				alert("Neeeeh das sollte so nicht sein")

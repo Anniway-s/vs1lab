@@ -100,38 +100,21 @@ app.post('/geotags',function(req,res){
 });
 
 app.get('/geotags',function(req,res){
-	var latitude = req.query.latitude;
-	var longitude = req.query.longitude;
+
 	var search_term = req.query.search_term;
 	var radius = req.query.radius;
 
-	if(radius === undefined){
-		radius = 0.5;
-	} else {
-		radius = parseFloat(radius);
+
+	radius === undefined ? radius = 1 : radius ;
+
+
+	if(search_term === undefined && radius === undefined){
+		res.status(200).json(inMemory.allGeoTags()).send();
+	} else if(search_term !== undefined && radius === undefined){
+		res.status(200).json(inMemory.searchGeoTagByTag(search_term)).send();
+	} else if(radius !== undefined) {
+		res.status(200).json(inMemory.searchGeoTagInRad(radius, req.body.latitude, req.body.longitude)).send();
 	}
-
-	if((latitude === undefined || longitude === undefined) && search_term === undefined){
-		res.status(200).json(inMemory.allGeoTags());
-	} else if(search_term !== undefined && (latitude === undefined || longitude === undefined)){
-		var currentTags = inMemory.searchGeoTagByTag(search_term);
-		res.status(200).json(currentTags).send;
-	} else if((latitude !== undefined || longitude !== undefined) && search_term === undefined){
-		var currentTags = inMemory.searchGeoTagInRad(radius, latitude, longitude);
-		res.status(200).json(currentTags).send;
-	} else{
-		var currentTags = inMemory.searchGeoTagInRad(radius, latitude, longitude);
-		currentTags = inMemory.searchGeoTagByTag2(search_term, currentTag);
-		res.status(200).json(currentTag).send();
-	}
-
-
-
-
-
-
-
-
 
 
 });
