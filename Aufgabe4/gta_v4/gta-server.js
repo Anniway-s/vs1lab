@@ -143,10 +143,8 @@ app.put('/geotags/:Location',function(req,res){
 	var location = parseInt(req.params.location);
     let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag, location);
     inMemory.addGeoTag(newGeoTag);
+	inMemory.ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
     res.status(200).send(newGeoTag);
-
-    inMemory.ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
-
 });
 
 /**
