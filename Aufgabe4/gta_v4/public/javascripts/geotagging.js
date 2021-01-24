@@ -109,7 +109,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         };
         console.log(tagList)
         var urlString = "https://www.mapquestapi.com/staticmap/v4/getmap?key=" +
-            apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lat + "," + lon + "&" + tagList;
+            apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lon + "," + lat + "&" + tagList;
 
         console.log("Generated Maps Url: " + urlString);
         return urlString;
@@ -175,13 +175,13 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 			searchTerm = searchTerm.replace("#" , "%23");
 			console.log("Suchbegriff ist nun:\t" + searchTerm);
 		}else{
-			console.log("Kein '#' vorhanden. Suchwort ist:\t" + searchTerm)
+			console.log("Kein '#' vorhanden. Suchwort ist:" + searchTerm)
 		}
 
 		//GET Request
-		ajax.open('GET', '/geotags?search_Term=' + searchTerm);
+		ajax.open('GET', "/geotags?search_Term=" + searchTerm);
 		ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		ajax.send();
+		ajax.send(null);
 
 		//Auf Status warten
 		ajax.onreadystatechange = function() {

@@ -40,7 +40,7 @@ app.use(express.static(__dirname + '/public'));
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
 var idVar=0;
-GeoTagForm=function (longitude, latitude, name, hashtag, id){
+GeoTagForm=function ( latitude, longitude, name, hashtag, id){
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
@@ -91,7 +91,7 @@ app.get('/', function(req, res) {
 
 app.post('/geotags',function(req,res){
 	console.log("reqest BODY: "+JSON.stringify(req.body));
-	let newGeoTag = new GeoTagForm(req.body.long,req.body.lat,req.body.nam,req.body.hash);
+	let newGeoTag = new GeoTagForm(req.body.lat,req.body.long,req.body.nam,req.body.hash);
 	inMemory.addGeoTag(newGeoTag);
 	console.log("##new geo tag in POST: "+JSON.stringify(newGeoTag));
 	var url = 'http://' + req.get('host') + req.url + '/' + newGeoTag.id;
@@ -100,18 +100,18 @@ app.post('/geotags',function(req,res){
 
 app.get('/geotags',function(req,res){
 
-	var search_term = req.query.search_term;
-	var radius = req.query.radius;
-
-
-	radius === undefined ? radius = 1 : radius ;
-
+	let search_term = req.query.search_Term;
+	let radius = req.query.radius;
+	radius = (radius === undefined) ?  0.4 : radius ;
+	console.log("GETTING by SearchTerm: "+search_term+" in Rad : "+radius);
 
 	if(search_term === undefined ){
 		res.status(200).json(inMemory.allGeoTags()).send();
-	} else if(search_term !== undefined ){
-		res.status(200).json(inMemory.searchGeoTagByTag(search_term)).send();
-	} else {
+	} else if(search_term !== undefined ){//by Search Term
+		let a = inMemory.searchGeoTagByTag(search_term);
+		console.log("gefiltertes Array: " +JSON.stringify(a));
+		res.status(200).json(a).send();
+	} else {//in Radius
 		res.status(200).json(inMemory.searchGeoTagInRad(radius, req.body.latitude, req.body.longitude)).send();
 	}
 
