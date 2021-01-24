@@ -115,120 +115,124 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 	};
 	
 
-
 	//Variablen für die Buttons erstellt
 	var btnTagging = document.getElementById("btnTagging");
 	var btnDiscovery = document.getElementById("btnDiscovery");
-	
+
 	//Jeweiligen Eventlistener
-	btnTagging.addEventListener('click' , geoTag);
-	btnDiscovery.addEventListener('click' , arrayTags);
+	btnTagging.addEventListener('click' , function(){
 
-	//Ajax XLMHttpRequest Objekt
-	var ajax = new XMLHttpRequest();
+		//Werte aus dem Dokument speichern
+		var latitude = document.getElementById().value;
+		var longitude = document.getElementById().value;
+		var name = document.getElementById().value;
+		var hashtag = document.getElementById().value;
 
-	var URLneuer
-	//Zugehörige Funktionen zu den Events
-	function geoTag(){
-		ajax.open('POST', './geotags', true);
-        ajax.setRequestHeader("Content-Type","application/json");
+		//Die Daten die gesendet werden sollen
+		var tag = (latitude, longitude, name, hashtag);
+
+		//Ajax Objekt erstellen
+		var ajax = new XMLHttpRequest();
+
+		//Den POST aufruf
+		ajax.open('POST', '/geotags', true);
+		ajax.setRequestHeader('Content-Type', 'application/json');
+		ajax.send(JSON.stringify(tag));
+
+		//Auf den Status warten
 		ajax.onreadystatechange = function() {
-            if (this.readyState === 4 && (this.status <= 299 && this.status > 199)){
-				console.log(ajax.response.obj + "neuer Scheiß")
-                URLneuer = updateMap(ajax.responseType="json");
-                console.log(URLneuer.stringify() + "URL in POST/GeoTag")
-            }
+			if(ajax.readyState === 4 && ajax.status === 201){
+				console.log(ajax.response);
+				list = JSON.parse(ajax.response);//Ja nein?
+				gtaLocator.updateData(latitude, longitude, list);//Ja nein?
+			}else if(ajax.readyState === 4){
+				console.log(ajax.statusText);
+				alert("Naaaah das sollte so nicht sein")
+			}
+		};
+		event.preventDefault();
+	});
+	btnDiscovery.addEventListener('click' , function(){
+		event.preventDefault();
+
+		//Werte aus dem Dokument entnehmen
+		var searchTerm = document.getElementById("search_term").value;
+		var latitude = document.getElementById("current_longitude").value;
+		var longitude = document.getElementById("current_latitude").value;
+
+		//Ajax Objekt erstellen
+		var ajax = new XMLHttpRequest();
+
+		//Suche mit einem Hashtag für senden vorbereiten
+		if(searchTerm[0] === '#'){
+			searchTerm = searchTerm.replace("#" , "%56");
+			console.log("Suchbegriff ist nun:\t" + searchTerm);
+		}else{
+			console.log("Kein '#' vorhanden. Suchwort ist:\t" + searchTerm)
 		}
-		//Object erstellen
+
+		//GET Request
+		ajax.open('GET', '/geotags?search_Term=' + searchTerm);
+		ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		ajax.send();
-        
-	}
 
-	//Discovery
-	function arrayTags(){
-		ajax.open('GET', './geotags', true);
-        ajax.setRequestHeader("Content-Type","application/json");
+		//Auf Status warten
 		ajax.onreadystatechange = function() {
-            if (this.readyState === 4 && (this.status <= 299 && this.status > 199)){
-                let response = ajax.responseType="json";
-                updateMap(response);
-            }
-        }
-        
-        ajax.send(null);
-        
-	}
+			if(ajax.readyState === 4 && ajax.status === 200){
+				list = JSON.parse(ajax.response);
+				gtaLocator.updateData(latitude, longitude, list);
+			}else if(ajax.readyState === 4){
+				console.log(ajax.statusText);
+				alert("Neeeeh das sollte so nicht sein")
+			}
+		}
+	});
 
-	function updateMap(resp) {
-		console.log(resp);
-		let thisTagString = document.getElementById("result-img").getAttribute("data-tags");
-			var URLneu = getLocationMapSrc(resp.body.latitude,
-            resp.body.longitude,
-            resp.body.hashtag);
-
-		return URLneu;
-    }
-    
     return { // Start öffentlicher Teil des Moduls ...
-
-
         // Public Member
-
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
         updateLocation: function() {
-            if(document.getElementById("longitude").value == "" && document.getElementById("latitude").value == ""){
-            //Aufgabe 2.2.1
-            tryLocate(function(c){
-                console.log(c.coords.longitude);
-                console.log(c.coords.latitude);
-                //Hidden Input in Discovery
-                document.getElementById("current_longitude").value = c.coords.longitude;
-                document.getElementById("current_latitude").value = c.coords.latitude;
-                //Input in Taggig
-                document.getElementById("longitude").value = c.coords.longitude;
-                document.getElementById("latitude").value = c.coords.latitude;
+			//Orte der Werte Zwischenspeichern
+			var latitude = document.getElementById("current_latitude").getAttribute("value");
+			var longitude = document.getElementById("current_longitude").getAttribute("value");
+			var dataTags = JSON.parse(document.getElementById("result-img").getAttribute("data-tags"));
+			
+			if(document.getElementById("longitude").value == "" && document.getElementById("latitude").value == ""){
+				//Bei erstem Aufruf
+				tryLocate(function(c){
+					//Zwischenspeichern der Inhalte
+					let latitude = c.coords.latitude;
+					let longitude = c.coords.longitude;
 
-                //Aufgabe 2.2.2
-                var thisTag;
-                var thisTagString = document.getElementById("result-img").getAttribute("data-tags");
-                if(thisTagString !== ""){
-                    thisTag = JSON.parse(thisTagString);
-                }
-                
-                console.log(thisTagString)
-                //Zoom von [0-18] wählbar
-                var zoom = 13;
-                var URL = getLocationMapSrc(document.getElementById("latitude").value, 
-                document.getElementById("longitude").value, 
-                thisTag, 
-                zoom);
+					//Map URL herstellen
+					let mapURL = getLocationMapSrc(latitude, longitude, dataTags);
 
-                //Suchen und ersetzen
-                var map = document.getElementById("result-img");
-                map.setAttribute ("src" , URL)
-
-                },function(error){
-                    alert(error);
-                });
-            }/*else{
-                var zoom;
-                var thisTag;
-                var thisTagString = document.getElementById("result-img").getAttribute("data-tags");
-                if(thisTagString !== ""){
-                    thisTag = JSON.parse(thisTagString);
-                }
-                var URL = getLocationMapSrc(document.getElementById("latitude").value, 
-                document.getElementById("longitude").value, 
-                thisTag, 
-                zoom);
-
-                //Suchen und ersetzen
-                var map = document.getElementById("result-img");
-                map.setAttribute ("src" , URL)
-            }*/
-
-        }
+					//Input für die Werte setzten
+					document.getElementById("latitude").value = latitude;
+					document.getElementById("longitude").value = longitude;
+					document.getElementById("current_latitude").value = latitude;
+					document.getElementById("current_longitude").value = longitude;
+					document.getElementById("result-img").setAttribute("src" , mapURL);
+				}, function (error) {
+					alert(error)
+				});
+           }else{
+			   //Falls schon etwas eingetragen ist
+				let mapURL = getLocationMapSrc(latitude, longitude, dataTags);
+				document.getElementById("result-img").setAttribute("src" , mapURL);
+			}
+			
+		},
+		updateData: function (latitude, longitude, tagsList) {
+			document.getElementById("results").empty();
+			for(var j = 0; j < tagsList.lenght; j++){
+				document.getElementById("results").append("<li>" + tagsList[j].name 
+				+ " (" + tagsList[j].latitude + "," + tagsList[j].longitude + ") " + tagsList[j].hashtag + "</li>");
+			}
+			let mapURL = getLocationMapSrc(latitude, longitude, tagsList);
+			document.getElementById("result-img").setAttribute("src" , mapURL);
+		}
 
     }; // ... Ende öffentlicher Teil
 

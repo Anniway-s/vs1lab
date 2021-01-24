@@ -41,13 +41,18 @@ app.use(express.static(__dirname + '/public'));
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
 var idVar=0;
-GeoTagForm=function (longitude, latitude, name, hashtag){
+GeoTagForm=function (longitude, latitude, name, hashtag, id){
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
-    this.hashtag = hashtag;
-    this.id= idVar;
-    idVar++;
+	this.hashtag = hashtag;
+	if(id === undefined){
+		this.id= idVar;
+    	idVar++;
+	}else{
+		this.id = id;
+	}
+    
     return this;
 }
 
@@ -60,8 +65,8 @@ GeoTagForm=function (longitude, latitude, name, hashtag){
  * - Funktion zum Löschen eines Geo Tags.
  */
 
+var inMemory = require("./public/javascripts/inMemory.js");
 const { json } = require('body-parser');
-
 
 
 
@@ -86,61 +91,79 @@ app.get('/', function(req, res) {
 
 
 app.post('/geotags',function(req,res){
-	/*
-    while(ArrayGeoTags[idVar].Location=='/'+idVar &&ArrayGeoTags[idVar].Location){ //FEHLER BEI 1. aufruf weil UNDEFINED
-        ++idVar;
-    }; //ist die id durch zb einen PUT schon im voraus vergeben? wir wollen ja hier nicht ersetzen
-	*/
-	console.log(req.body);
 	let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-	console.log(newGeoTag);
-    let newJson ={
-        msg: 'success, created',
-        obj: newGeoTag,
-        Location: '/' +newGeoTag.id,
-    };
-    res.status(201).json({
-        msg: 'success, created',
-        obj: newGeoTag,
-        Location: '/' +newGeoTag.id,
-    });
-    //if(newJson.Location!=='/0'){
-        ArrayGeoTags.push(newGeoTag);//Wieso newJson und nicht newGeoTag???
-    //}
+	console.log(req.body.obj + "\n\n");
+	console.log("\n\n" + newGeoTag);
+	inMemory.addGeoTag(newGeoTag, ArrayGeoTags);
+	var url = 'http://' + req.get('host') + req.url + '/' + newGeoTag.id;
+	res.status(201).location(url).send();
 });
 
 app.get('/geotags',function(req,res){
-    console.log("ArrayGet: "+JSON.stringify(ArrayGeoTags));
-    res.status(200).json(
-        ArrayGeoTags
-    );
-    res.end();
+	var latitude = req.query.latitude;
+	var longitude = req.query.longitude;
+	var search_term = req.query.search_term;
+	var radius = req.query.radius;
+
+	if(radius === undefined){
+		radius = 0.5;
+	} else {
+		radius = parseFloat(radius);
+	}
+
+	if((latitude === undefined || longitude === undefined) && search_term === undefined){
+		res.status(200).json(inMemory.allGeoTags());
+	} else if(search_term !== undefined && (latitude === undefined || longitude === undefined)){
+		var currentTags = inMemory.searchGeoTagByTag(search_term);
+		res.status(200).json(currentTags).send;
+	} else if((latitude !== undefined || longitude !== undefined) && search_term === undefined){
+		var currentTags = inMemory.searchGeoTagInRad(radius, latitude, longitude);
+		res.status(200).json(currentTags).send;
+	} else{
+		var currentTags = inMemory.searchGeoTagInRad(radius, latitude, longitude);
+		currentTags = inMemory.searchGeoTagByTag2(search_term, currentTag);
+		res.status(200).json(currentTag).send();
+	}
+
+
+
+
+
+
+
+
+
+
 });
 
 app.get('/geotags/:Location',function(req,res){
-    res.status(200).json(
-        ArrayGeoTags[req.params.Location]
-    );
-    res.end();
-});
-
-app.put('/geotags/:Location',function(req,res){
-    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag);
-    let newJson ={
-        msg: 'success, created',
-        obj: newGeoTag,
-        Location: '/' +newGeoTag.id,
-    };
-    res.status(201).json(newJson);
-
-    ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
-
+	var location = parseInt(req.params.location);
+	var currentTag = inMemory.tagWithID(location);
+	if(currentTag === undefined){
+		res.status(404).send();
+	}else{
+		res.status(200).json(currentTag).send();
+	}
 });
 
 app.delete('/geotags/:Location',function(req,res){
-    ArrayGeoTags.splice(req.params.obj.id);
-    idVar--; //Arrayindex anpassen um keine Lücke zu haben
-    res.status(205).json(null);
+    var location = parseInt(req.params.location);
+	var currentTag = inMemory.tagWithID(location);
+	if(currentTag === undefined){
+		res.status(404).send();
+	}else{
+		inMemory.deleteGeoTag(location);
+		res.status(200).send();
+	}
+});
+
+app.put('/geotags/:Location',function(req,res){
+	var location = parseInt(req.params.location);
+    let newGeoTag = new GeoTagForm(req.body.longitude,req.body.latitude,req.body.name,req.body.hashtag, location);
+    inMemory.addGeoTag(newGeoTag);
+    res.status(200).send(newGeoTag);
+
+    ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
 
 });
 
