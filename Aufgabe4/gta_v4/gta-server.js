@@ -108,11 +108,11 @@ app.get('/geotags',function(req,res){
 	radius === undefined ? radius = 1 : radius ;
 
 
-	if(search_term === undefined && radius === undefined){
+	if(search_term === undefined ){
 		res.status(200).json(inMemory.allGeoTags()).send();
-	} else if(search_term !== undefined && radius === undefined){
+	} else if(search_term !== undefined ){
 		res.status(200).json(inMemory.searchGeoTagByTag(search_term)).send();
-	} else if(radius !== undefined) {
+	} else {
 		res.status(200).json(inMemory.searchGeoTagInRad(radius, req.body.latitude, req.body.longitude)).send();
 	}
 

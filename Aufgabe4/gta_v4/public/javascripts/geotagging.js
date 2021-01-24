@@ -95,7 +95,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
      * zoom: Zoomfaktor der Karte
      */
     var getLocationMapSrc = function(lat, lon, tags, zoom) {
-        zoom = typeof zoom !== 'undefined' ? zoom : 10;
+        zoom = typeof zoom !== 'undefined' ? zoom : 12;
 
         if (apiKey === "YOUR_API_KEY_HERE") {
             console.log("No API key provided.");
@@ -231,9 +231,20 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 		},
 		updateData: function (latitude, longitude, tagsList) {
 			//document.getElementById("results").empty();
-			for(var j = 0; j < tagsList.lenght; j++){
-				document.getElementById("results").append("<li>" + tagsList[j].name 
-				+ " (" + tagsList[j].latitude + "," + tagsList[j].longitude + ") " + tagsList[j].hashtag + "</li>");
+
+			let element = document.getElementById("results");
+			let li = document.createElement("li");
+
+			console.log("###die taglist vor dem resaults :"+JSON.stringify(tagsList)+" L= "+tagsList.lenght);
+			if(tagsList.lenght!==undefined)for(let j = 0; j < tagsList.lenght; j++){
+				let li = document.createElement("li");
+				let tag = tagsList[j].name + " (" + tagsList[j].latitude + "," + tagsList[j].longitude + ") " + tagsList[j].hashtag;
+				li.appendChild((document.createTextNode(tag)));
+				element.appendChild(li);
+			}else{
+				let tag = tagsList.name + " (" + tagsList.latitude + "," + tagsList.longitude + ") " + tagsList.hashtag;
+				li.appendChild((document.createTextNode(tag)));
+				element.appendChild(li);
 			}
 			let mapURL = getLocationMapSrc(latitude, longitude, tagsList);
 			document.getElementById("result-img").setAttribute("src" , mapURL);
