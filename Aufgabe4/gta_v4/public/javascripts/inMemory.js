@@ -25,7 +25,9 @@ exports.addGeoTagWithLocation = function (neuerGeoTag, location){
 exports.tagWithID = function(location){//Überarbeiten
 	console.log(location);
 	for(var i = 0; i < ArrayGeoTags.length; i++){
+        console.log("TEST: "+ArrayGeoTags[i].location+" =? "+location);
 		if(ArrayGeoTags[i].location === parseInt(location)){
+            console.log("SUCCES! ret: "+JSON.stringify(ArrayGeoTags[i]));
 			return ArrayGeoTags[i];
 		}
 	}

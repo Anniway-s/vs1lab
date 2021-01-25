@@ -23,7 +23,7 @@ Content-Type: application/json
 {
   "lat": 48,
   "long": 8,
-  "nam": "blau",
+  "nam": "POSTed",
   "hash": "#home"
 }
 
@@ -33,16 +33,16 @@ GET http://localhost:3000/geotags/0
 
 
 ###
-PUT http://localhost:3000/geotags/0 
+PUT http://localhost:3000/geotags/3
 Content-Type: application/json
 
 {
 	"lat": 43,
 	"long": 40,
-	"nam": "meh",
+	"nam": "PUTed-2",
 	"hash": "#home"
 }
 
 ###
-DELETE http://localhost:3000/1
+DELETE http://localhost:3000/geotags/3
 

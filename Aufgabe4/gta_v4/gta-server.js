@@ -46,10 +46,15 @@ GeoTagForm=function ( latitude, longitude, name, hashtag, id){
     this.name = name;
 	this.hashtag = hashtag;
 	if(id === undefined){
+		for(let i=0; i < inMemory.ArrayGeoTags.length; i++){
+			if(inMemory.ArrayGeoTags[i].location===location){
+				location++;
+			}
+		}
 		this.location= location;
     	location++;
 	}else{
-		this.location = location;
+		this.location = parseInt(id);
 	}
     
     return this;
@@ -132,7 +137,7 @@ app.get('/geotags/:location',function(req,res){
 
 
 app.delete('/geotags/:location',function(req,res){
-    var location = parseInt(req.query.location);
+    var location = parseInt(req.params.location);
 	var currentTag = inMemory.tagWithID(location);
 	if(currentTag !== undefined){
 		res.status(404).send(); //##Es geht immer hier rein -> tagWithID stimmt nicht
@@ -143,7 +148,7 @@ app.delete('/geotags/:location',function(req,res){
 });
 
 app.put('/geotags/:location',function(req,res){
-	var location = (req.query.location); //###Ist "undefinde"
+	var location = (req.params.location); //###Ist "undefinde"
     let newGeoTag = new GeoTagForm(req.body.lat,req.body.long,req.body.nam,req.body.hash, location);
 	inMemory.addGeoTagWithLocation(newGeoTag, location);
 	//inMemory.ArrayGeoTags[newGeoTag.id]=newGeoTag; //überschreiben
