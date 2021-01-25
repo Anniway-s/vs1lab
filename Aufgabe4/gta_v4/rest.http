@@ -44,5 +44,5 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3000/geotags/3
+DELETE http://localhost:3000/geotags/2
 

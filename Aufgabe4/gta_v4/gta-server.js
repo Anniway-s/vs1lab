@@ -137,12 +137,13 @@ app.get('/geotags/:location',function(req,res){
 
 
 app.delete('/geotags/:location',function(req,res){
-    var location = parseInt(req.params.location);
-	var currentTag = inMemory.tagWithID(location);
-	if(currentTag !== undefined){
-		res.status(404).send(); //##Es geht immer hier rein -> tagWithID stimmt nicht
+    var loc = parseInt(req.params.location);
+	var currentTag = inMemory.tagWithID(loc);
+	if(currentTag === undefined){
+		res.status(404).send();
 	}else{
-		inMemory.deleteGeoTag(location); //##Ob das hier Stimmt weiß ich nicht
+		inMemory.deleteGeoTag(loc);
+		location = 0; //nächser post soll auf erste freie stelle gehen
 		res.status(200).send("OK");
 	}
 });

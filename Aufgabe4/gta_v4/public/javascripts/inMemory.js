@@ -13,10 +13,10 @@ exports.addGeoTagWithLocation = function (neuerGeoTag, location){
 
 //Funktion zum Löschen
  exports.deleteGeoTag = function(location){//Überarbeiten
-	let b;
+
 	for(let i = 0; i < ArrayGeoTags.length; i++){
 		if(ArrayGeoTags[i].location === parseInt(location)){
-			ArrayGeoTags.splice(b, 1);
+			ArrayGeoTags.splice(i, 1);
 		}
 	}
     
